@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<dbconnect>
+		<constr>postgres://postgres:12345@localhost:5432/Raw_Accounting?sslmode=disabled</constr>
+	</dbconnect>
+	<server>
+		<maxLogSizeMB>1</maxLogSizeMB>
+		<maxLogDuration>24h</maxLogDuration>
+		<logdir>D:\Курсач\project\raw_supply\serverlog</logdir>
+		<logname>log.txt</logname>
+		<rotationPeriod>2h</rotationPeriod>
+	</server>
+</configuration>
