@@ -13,3 +13,8 @@
 # Project-local glide cache, RE: https://github.com/Masterminds/glide/issues/736
 .glide/
 .idea/
+build/static/js/main.1bc4eee1.js.map
+build/
+node_modules/
+serverlog/
+src/картинки/
