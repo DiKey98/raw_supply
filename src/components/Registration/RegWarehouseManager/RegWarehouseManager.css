@@ -1,0 +1,68 @@
+.container {
+    width: 400px !important;
+    height: 100vh;
+    text-align: center;
+    background: red;
+}
+
+#regForm {
+    position: relative;
+    top: 25%;
+    color: black !important;
+    font-weight: bold !important;
+    font-size: 15px;
+}
+
+#regButton {
+    font-size: 15px;
+    font-weight: bold;
+    float: right;
+}
+
+label {
+    float: left;
+}
+
+#toMainFromReg {
+    position: relative;
+    width: 300px;
+    background: green;
+    top: 35%;
+    font-size: 30px !important;
+    font-weight: bold !important;
+    color: black;
+    text-align: right !important;
+}
+
+#inscriptionRegManager {
+    position: relative;
+    top: 20%;
+    font-size: 30px !important;
+    font-weight: bold !important;
+    color: white !important;
+}
+
+#inputLogin {
+
+}
+
+#loginInfo {
+    float: left;
+    color: red !important;
+    font-size: 14px !important;
+    visibility: hidden;
+}
+
+#passwordInfo {
+    float: left;
+    color: red !important;
+    font-size: 14px !important;
+    visibility: hidden;
+}
+
+#repeatPasswordInfo {
+    float: left;
+    color: red !important;
+    font-size: 14px !important;
+    visibility: hidden;
+}

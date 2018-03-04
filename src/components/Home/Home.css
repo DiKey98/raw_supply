@@ -1,0 +1,39 @@
+.container {
+    width: 400px !important;
+    height: 100vh;
+    text-align: center;
+}
+
+.roles {
+    top: 20%;
+    height: 400px;
+    width: 350px;
+    padding: 15px;
+
+}
+
+.role {
+    top: 20%;
+    width: 300px !important;
+    margin-bottom: 30px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    font-size: medium !important;
+    border-radius: 30px !important;
+    background: bisque !important;
+    color: black !important;
+    font-weight: bold !important;
+}
+
+#inscription {
+    font-size: 30px !important;
+    font-weight: bold !important;
+    color: white !important;
+}
+
+#reg {
+    top: 30%;
+    font-size: 30px !important;
+    font-weight: bold !important;
+    color: black;
+}
