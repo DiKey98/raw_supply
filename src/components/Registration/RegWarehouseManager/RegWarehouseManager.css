@@ -2,7 +2,6 @@
     width: 400px !important;
     height: 100vh;
     text-align: center;
-    background: red;
 }
 
 #regForm {
@@ -16,7 +15,6 @@
 #regButton {
     font-size: 15px;
     font-weight: bold;
-    float: right;
 }
 
 label {
@@ -24,14 +22,13 @@ label {
 }
 
 #toMainFromReg {
-    position: relative;
-    width: 300px;
-    background: green;
-    top: 35%;
     font-size: 30px !important;
     font-weight: bold !important;
     color: black;
-    text-align: right !important;
+}
+
+#toMainFromRegBlock {
+    top: 30%;
 }
 
 #inscriptionRegManager {
@@ -42,26 +39,8 @@ label {
     color: white !important;
 }
 
-#inputLogin {
-
-}
-
-#loginInfo {
-    float: left;
-    color: red !important;
-    font-size: 14px !important;
-    visibility: hidden;
-}
-
-#passwordInfo {
-    float: left;
-    color: red !important;
-    font-size: 14px !important;
-    visibility: hidden;
-}
-
-#repeatPasswordInfo {
-    float: left;
+.errorInfo {
+    text-align: left;
     color: red !important;
     font-size: 14px !important;
     visibility: hidden;

@@ -20,6 +20,47 @@ export default class RegWarehouseManager extends Component {
         this.handleRepeatPasswordInput = this.handleRepeatPasswordInput.bind(this);
         this.validateLogin = this.validateLogin.bind(this);
         this.validatePassword = this.validatePassword.bind(this);
+        RegWarehouseManager.errorInfo = RegWarehouseManager.errorInfo.bind(this);
+    }
+
+    componentDidMount() {
+        $('input').focusin(function () {
+            $(this).select();
+        }).click(function () {
+            $('.errorInfo').css({
+                    visibility: 'hidden'
+                }
+            );
+            $('input').css({
+                borderWidth: '0px',
+            })
+        });
+    }
+
+    static errorInfo(idInfoElement, text) {
+        $(`#${idInfoElement}`).text(text).css({
+            visibility: 'visible'
+        });
+        if (arguments.length < 3) {
+            return;
+        }
+        $(`#${arguments[2]}`).css({
+            borderWidth: '3px',
+            borderColor: 'red'
+        });
+        if (arguments.length < 4) {
+            return;
+        }
+        $(`#${arguments[3]}`).text(text).css({
+            visibility: 'visible',
+        });
+        if (arguments.length < 5) {
+            return;
+        }
+        $(`#${arguments[4]}`).text(text).css({
+            borderWidth: '3px',
+            borderColor: 'red'
+        });
     }
 
     handleSubmit(event) {
@@ -48,35 +89,33 @@ export default class RegWarehouseManager extends Component {
     }
 
     validateLogin() {
+        if (this.state.login.length === 0) {
+            RegWarehouseManager.errorInfo('loginInfo', 'Не введён логин', 'inputLogin');
+            return;
+        }
         if (this.state.login.length < 10) {
-            $('#loginInfo').text('Неверный логин').css({
-                visibility: 'visible'
-            })
+            RegWarehouseManager.errorInfo('loginInfo', 'Неверный логин', 'inputLogin');
         }
     }
 
     validatePassword() {
-        if (this.state.password.length < 10) {
-            $('#passwordInfo').text('Неверный пароль').css({
-                visibility: 'visible',
-                marginBottom: '30px !important'
-            })
+        if (this.state.password.length === 0) {
+            RegWarehouseManager.errorInfo('passwordInfo', 'Не введён пароль', 'inputPassword');
+            return;
         }
-        if (this.state.repeatPassword !==  this.state.password) {
-            $('#repeatPasswordInfo').text('Пароли не совпадают').css({
-                visibility: 'visible',
-                marginBottom: '30px !important'
-            });
-            $('#passwordInfo').text('Пароли не совпадают').css({
-                visibility: 'visible',
-                marginBottom: '30px !important'
-            })
+        if (this.state.repeatPassword !== this.state.password) {
+            RegWarehouseManager.errorInfo('passwordInfo', 'Пароли не совпадают', 'inputPassword',
+                'repeatPasswordInfo', 'repeatInputPassword');
+            return;
+        }
+        if (this.state.password.length < 10) {
+            RegWarehouseManager.errorInfo('passwordInfo', 'Неверный пароль', 'inputPassword');
         }
     }
 
     render() {
         return (
-            <div className="container">
+            <div className="container center-block">
 
                 <div id="inscriptionRegManager">Регистрация менеджера склада</div>
 
@@ -88,7 +127,7 @@ export default class RegWarehouseManager extends Component {
                         </label>
                         <input type="text" onChange={this.handleLoginInput} className="form-control"
                                id="inputLogin" placeholder="Введите логин"/>
-                        <p id="loginInfo"/>
+                        <p id="loginInfo" className="errorInfo"/>
                     </div>
 
                     <div className="form-group">
@@ -97,7 +136,7 @@ export default class RegWarehouseManager extends Component {
                         </label>
                         <input type="password" onChange={this.handlePasswordInput} className="form-control"
                                id="inputPassword" placeholder="Введите пароль"/>
-                        <p id="passwordInfo"/>
+                        <p id="passwordInfo" className="errorInfo"/>
                     </div>
 
                     <div className="form-group">
@@ -106,7 +145,7 @@ export default class RegWarehouseManager extends Component {
                         </label>
                         <input type="password" onChange={this.handleRepeatPasswordInput} className="form-control"
                                id="repeatInputPassword" placeholder="Повторите пароль"/>
-                        <p id="repeatPasswordInfo"/>
+                        <p id="repeatPasswordInfo" className="errorInfo"/>
                     </div>
 
                     <button id="regButton" type="submit" className="btn btn-default">
@@ -115,13 +154,14 @@ export default class RegWarehouseManager extends Component {
 
                 </form>
 
-                <div className="btn-group-vertical center-block" role="group" aria-label="...">
-                    <Link id="toMain" className="btn btn-link btn-block" to='/'>
+                <div id="toMainFromRegBlock" className="btn-group-vertical center-block" role="group" aria-label="...">
+                    <Link id="toMainFromReg" className="btn btn-link" to='/'>
                         На главную
                     </Link>
                 </div>
 
             </div>
+
         )
     }
 }
