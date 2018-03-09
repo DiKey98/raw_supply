@@ -1,4 +1,4 @@
-package registration
+/*package registration
 
 import (
 	"net/http"
@@ -6,7 +6,6 @@ import (
 	"database/sql"
 	. "../connect"
 	"golang.org/x/crypto/bcrypt"
-	"encoding/json"
 )
 
 func Registration(rw http.ResponseWriter, req *http.Request) {
@@ -46,21 +45,4 @@ func isContains(DB *sql.DB, login string) (bool) {
 	}
 
 	return rows.Next()
-}
-
-func response(rw http.ResponseWriter, req *http.Request, err error, status int, res []byte) {
-	if err != nil {
-		data, _ := json.Marshal(map[string]interface{}{"OK": false, "Error": err.Error()})
-		rw.WriteHeader(status)
-		rw.Write(data)
-		return
-	}
-
-	if res == nil && len(res) == 0 {
-		http.NotFound(rw, req)
-		return
-	}
-
-	rw.WriteHeader(status)
-	rw.Write(res)
-}
+}*/

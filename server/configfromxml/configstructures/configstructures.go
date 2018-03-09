@@ -8,24 +8,25 @@ import (
 
 type Configuration struct {
 	//корневой элемент файла конфигурации
-	XMLName xml.Name `xml:"configuration"`
+	XMLName   xml.Name `xml:"configuration"`
 	DBConnect DBConnect
-	Server  Server
+	Server    Server
 }
 
 type DBConnect struct {
 	//подключение к БД
-	XMLName  xml.Name `xml:"dbconnect"`
-	ConnectionString string `xml:"constr"`
+	XMLName          xml.Name `xml:"dbconnect"`
+	ConnectionString string   `xml:"constr"`
 }
 
 type Server struct {
 	//параметры сервера
 	XMLName        xml.Name `xml:"server"`
-	MaxLogSizeMB    Float64      `xml:"maxLogSizeMB"`
+	Port           string   `xml:"port"`
+	MaxLogSizeMB   Float64  `xml:"maxLogSizeMB"`
 	MaxLogDuration Duration `xml:"maxLogDuration"`
 	LogDir         string   `xml:"logdir"`
-	LogName         string   `xml:"logname"`
+	LogName        string   `xml:"logname"`
 	RotationPeriod Duration `xml:"rotationPeriod"`
 }
 

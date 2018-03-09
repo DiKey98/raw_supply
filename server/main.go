@@ -2,8 +2,6 @@ package main
 
 import (
 	"net/http"
-	. "./authorization"
-	. "./registration"
 	"github.com/gorilla/context"
 	. "./configfromxml/configcreator"
 	. "./logger/loggermanager"
@@ -11,6 +9,9 @@ import (
 	"fmt"
 	"github.com/chasex/glog"
 	. "./connect"
+	. "./httphandlers/regwarehousemanager"
+	. "./httphandlers/loginadmin"
+	. "./httphandlers/getunverifiedusers"
 	"time"
 )
 
@@ -48,16 +49,20 @@ func main() {
 		}
 	}()
 
-	DB, err = ConnectToDataBase(Config.DBConnect.ConnectionString[0:12])
+	DB, err = ConnectToDataBase(Config.DBConnect.ConnectionString)
 	if err != nil {
 		Logger.Errorf("%s \r\n", err.Error())
 		Logger.Flush()
 	}
 
 	http.Handle("/", http.FileServer(http.Dir("./build")))
-	http.HandleFunc("/registration/", Registration)
-	http.HandleFunc("/login/", Login)
-	http.HandleFunc("/logout/", Logout)
+	http.HandleFunc("/regWarehouseManager/", RegWarehouseManager)
+	http.HandleFunc("/loginAdmin/", LoginAdmin)
+	http.HandleFunc("/getUnverifiedUsers/", GetUnverifiedUsers)
 
-	http.ListenAndServe(":8080", context.ClearHandler(http.DefaultServeMux))
+	/*http.HandleFunc("/registration/", Registration)
+	http.HandleFunc("/login/", Login)
+	http.HandleFunc("/logout/", Logout)*/
+
+	http.ListenAndServe(Config.Server.Port, context.ClearHandler(http.DefaultServeMux))
 }

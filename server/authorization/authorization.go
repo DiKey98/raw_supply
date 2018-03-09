@@ -10,12 +10,6 @@ import (
 	"encoding/json"
 )
 
-type User struct {
-	ID       int
-	Login    string
-	Password string
-}
-
 var store = sessions.NewCookieStore([]byte("trololo"))
 
 func Login(rw http.ResponseWriter, req *http.Request) {
@@ -90,27 +84,7 @@ func Logout(rw http.ResponseWriter, req *http.Request) {
 	session.Save(req, rw)
 }
 
-func getUserByLogin(login string) (User) {
-	query := `
-	SELECT "ID", "Login", "Password"
-	FROM "Users"
-	WHERE "Login" = $1`
 
-	rows, err := DB.Query(query, login)
-	if err != nil {
-		return User{0, "", ""}
-	}
-	defer rows.Close()
-
-	user := User{0, "", ""}
-	for rows.Next() {
-		err = rows.Scan(&user.ID, &user.Login, &user.Password)
-		if err != nil {
-			return User{0, "", ""}
-		}
-	}
-	return user
-}
 
 func response(rw http.ResponseWriter, req *http.Request, err error, status int, res []byte) {
 	if err != nil {

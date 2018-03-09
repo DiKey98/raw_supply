@@ -1,0 +1,47 @@
+.container {
+    width: 400px !important;
+    height: 100vh;
+    text-align: center;
+}
+
+#adminLoginForm {
+    position: relative;
+    top: 25%;
+    color: black !important;
+    font-weight: bold !important;
+    font-size: 15px;
+}
+
+#adminLoginButton {
+    font-size: 15px;
+    font-weight: bold;
+}
+
+label {
+    float: left;
+}
+
+#toMainFromAdminLogin {
+    font-size: 30px !important;
+    font-weight: bold !important;
+    color: black;
+}
+
+#toMainFromAdminLoginBlock {
+    top: 30%;
+}
+
+#inscriptionLoginAdmin {
+    position: relative;
+    top: 20%;
+    font-size: 30px !important;
+    font-weight: bold !important;
+    color: white !important;
+}
+
+.errorInfo {
+    text-align: left;
+    color: red !important;
+    font-size: 14px !important;
+    visibility: hidden;
+}
