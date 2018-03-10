@@ -6,6 +6,7 @@ import RegistrationMain from './components/Registration/RegistrationMain';
 import RegWarehouseManager from './components/Registration/RegWarehouseManager/RegWarehouseManager';
 import AdminPage from './components/Admin/AdminPage/AdminPage';
 import AdminAuthorization from './components/Admin/AdminAuthorization/AdminAuthorization';
+import RegInfoPage from './components/RegInfoPage/RegInfoPage';
 
 
 export default class App extends Component {
@@ -18,8 +19,9 @@ export default class App extends Component {
                     <Route exact={true} path='/registration/' component={RegistrationMain}/>
                     <Route exact={true} path='/registration/warehouseManager/' component={RegWarehouseManager}/>
                     <Route exact={true} path='/registration/supplier/' component={RegistrationMain}/>
-                    {<Route exact={true} path='/admin/page/' component={AdminPage}/>}
+                    <Route exact={true} path='/admin/page/' component={AdminPage}/>
                     <Route exact={true} path='/admin/authorization/' component={AdminAuthorization}/>
+                    <Route exact={true} path='/regInfoPage/' component={RegInfoPage}/>
                 </Switch>
             </div>
         );

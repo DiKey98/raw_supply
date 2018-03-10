@@ -38,4 +38,7 @@ func RegWarehouseManager(rw http.ResponseWriter, req *http.Request) {
 	if err != nil {
 		WriteToLog(err.Error())
 	}
+
+	res, _ := json.Marshal(map[string]interface{}{"OK": true, "ErrorInfo": ""})
+	Response(rw, req, nil, http.StatusOK, res)
 }

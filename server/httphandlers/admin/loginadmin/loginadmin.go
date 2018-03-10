@@ -4,11 +4,11 @@ import (
 	"net/http"
 	"fmt"
 	"golang.org/x/crypto/bcrypt"
-	. "../../utils"
+	. "../../../utils"
 	"encoding/json"
 	"github.com/gorilla/sessions"
 	"github.com/satori/go.uuid"
-	. "../../connect"
+	. "../../../connect"
 )
 
 var store = sessions.NewCookieStore([]byte("adminSessions"))
@@ -23,22 +23,20 @@ func LoginAdmin(rw http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	if session.Values["authenticated"] != nil {
-		if session.Values["authenticated"].(bool) {
-			fmt.Println("Уже зареган")
+	if session.Values["adminAuthenticated"] != nil {
+		if session.Values["adminAuthenticated"].(bool) {
 			return
 		}
 	}
 
 	user := GetUserByLogin(login, "Users")
 
+	res := make(map[string]interface{}, 0)
+	res["ErrorLogin"] = ""
+	res["ErrorPassword"] = ""
+
 	if user.Login == "" {
-		res := make(map[string]interface{}, 0)
 		res["ErrorLogin"] = "Неверный логин"
-		err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
-		if err != nil {
-			res["ErrorPassword"] = "Неверный пароль"
-		}
 		jsonRes, _ := json.Marshal(res)
 		Response(rw, req, nil, http.StatusOK, jsonRes)
 		return
@@ -46,7 +44,6 @@ func LoginAdmin(rw http.ResponseWriter, req *http.Request) {
 
 	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
 	if err != nil {
-		res := make(map[string]interface{}, 0)
 		res["ErrorPassword"] = "Неверный пароль"
 		jsonRes, _ := json.Marshal(res)
 		Response(rw, req, nil, http.StatusOK, jsonRes)
@@ -78,6 +75,7 @@ func LoginAdmin(rw http.ResponseWriter, req *http.Request) {
 		fmt.Println(err)
 	}
 
-	jsonRes, _ := json.Marshal(map[string]interface{}{"adminAuthenticated" : true})
+	res["adminAuthenticated"] = true
+	jsonRes, _ := json.Marshal(res)
 	Response(rw, req, nil, http.StatusOK, jsonRes)
 }

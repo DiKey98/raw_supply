@@ -16,6 +16,14 @@ type User struct {
 	IsAdmin  bool
 }
 
+type UnverifiedUser struct {
+	ID       int
+	Login    string
+	Password string
+	FIO string
+	Role  string
+}
+
 func Response(rw http.ResponseWriter, req *http.Request, err error, status int, res []byte) {
 	if err != nil {
 		data, _ := json.Marshal(map[string]interface{}{"OK": false, "Error": err.Error()})

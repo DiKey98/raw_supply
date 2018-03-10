@@ -1,0 +1,30 @@
+#unverifiedUsersContainer {
+    padding-top: 5%;
+    word-spacing: 1.2em;
+    width: 530px !important;
+}
+
+.unverifiedUser {
+    margin-bottom: 30px;
+    font-size: 15px !important;
+    font-weight: bold !important;
+    color: black;
+    background: white;
+    border-radius: 10px;
+}
+
+.usersData {
+    margin-bottom: 10px;
+}
+
+.control {
+    margin-right: 10px;
+    width: 150px;
+    font-weight: bold !important;
+    border-width: 3px;
+}
+
+#unverifiedManagersInscription {
+    margin-bottom: 10px;
+    word-spacing: normal;
+}

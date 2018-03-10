@@ -8,13 +8,6 @@ import (
 	"fmt"
 )
 
-type UnverifiedUser struct {
-	ID       int
-	Login    string
-	FIO string
-	Role  string
-}
-
 func GetUnverifiedUsers(rw http.ResponseWriter, req *http.Request) {
 	query := `
 	SELECT "ID", "FIO", "Login", "Role"
@@ -24,7 +17,6 @@ func GetUnverifiedUsers(rw http.ResponseWriter, req *http.Request) {
 
 	rows, err := DB.Query(query)
 	if err != nil {
-		fmt.Println(err)
 		res, _ := json.Marshal([]UnverifiedUser{})
 		Response(rw, req, nil, http.StatusOK, res)
 		return
@@ -33,8 +25,8 @@ func GetUnverifiedUsers(rw http.ResponseWriter, req *http.Request) {
 
 
 	for rows.Next() {
-		user := UnverifiedUser{0, "", "", ""}
-		err = rows.Scan(&user.ID, &user.Login, &user.FIO, &user.Role)
+		user := UnverifiedUser{0, "", "", "", ""}
+		err = rows.Scan(&user.ID, &user.FIO, &user.Login, &user.Role)
 		if err != nil {
 			fmt.Println(err)
 			res, _ := json.Marshal([]UnverifiedUser{})

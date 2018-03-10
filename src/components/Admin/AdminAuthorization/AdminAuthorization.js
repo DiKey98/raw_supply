@@ -47,6 +47,20 @@ export default class AdminAuthorization extends React.Component {
         });
     }
 
+    componentDidMount() {
+        $('input').focusin(function () {
+            $(this).select();
+        }).click(function () {
+            $('.errorInfo').css({
+                    visibility: 'hidden'
+                }
+            );
+            $('input').css({
+                borderWidth: '0px',
+            })
+        });
+    }
+
 
     handleLoginInput(event) {
         this.setState({
@@ -71,11 +85,11 @@ export default class AdminAuthorization extends React.Component {
                 password: this.state.password
             },
             success: function (dataFromServer) {
-                if (dataFromServer['ErrorLogin'] !== undefined) {
+                if (dataFromServer['ErrorLogin'].length !== 0) {
                     AdminAuthorization.errorInfo('loginAdminInfo',
                         dataFromServer['ErrorLogin'], 'inputAdminLogin');
                 }
-                if (dataFromServer['ErrorPassword'] !== undefined) {
+                if (dataFromServer['ErrorPassword'] !== "") {
                     AdminAuthorization.errorInfo('passwordAdminInfo',
                         dataFromServer['ErrorPassword'], 'inputAdminPassword');
                 }
@@ -88,7 +102,7 @@ export default class AdminAuthorization extends React.Component {
     }
 
     render() {
-        if (this.cookies.get('adminAuthenticated')) {
+        if (this.cookies.get('adminAuthenticated') !== undefined) {
             return (
                 <Redirect to='/admin/page/'/>
             )

@@ -10,8 +10,11 @@ import (
 	"github.com/chasex/glog"
 	. "./connect"
 	. "./httphandlers/regwarehousemanager"
-	. "./httphandlers/loginadmin"
+	. "./httphandlers/admin/loginadmin"
 	. "./httphandlers/getunverifiedusers"
+	. "./httphandlers/admin/logoutadmin"
+	. "./httphandlers/unverifiedwarehousemangers/confirm"
+	. "./httphandlers/unverifiedwarehousemangers/delete"
 	"time"
 )
 
@@ -58,11 +61,10 @@ func main() {
 	http.Handle("/", http.FileServer(http.Dir("./build")))
 	http.HandleFunc("/regWarehouseManager/", RegWarehouseManager)
 	http.HandleFunc("/loginAdmin/", LoginAdmin)
+	http.HandleFunc("/logoutAdmin/", LogoutAdmin)
 	http.HandleFunc("/getUnverifiedUsers/", GetUnverifiedUsers)
-
-	/*http.HandleFunc("/registration/", Registration)
-	http.HandleFunc("/login/", Login)
-	http.HandleFunc("/logout/", Logout)*/
+	http.HandleFunc("/confirmWarehouseManager/", ConfirmWarehouseManager)
+	http.HandleFunc("/deleteWarehouseManager/", DeleteUnverifiedWarehouseManager)
 
 	http.ListenAndServe(Config.Server.Port, context.ClearHandler(http.DefaultServeMux))
 }

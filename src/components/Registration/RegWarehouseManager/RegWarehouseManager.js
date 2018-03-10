@@ -4,6 +4,7 @@ import './RegWarehouseManager.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import $ from 'jquery';
 import Constants from '../../config';
+import { Redirect } from 'react-router';
 
 export default class RegWarehouseManager extends Component {
     isValidLogin = false;
@@ -14,7 +15,8 @@ export default class RegWarehouseManager extends Component {
             fio: "",
             login: "",
             password: "",
-            repeatPassword: ""
+            repeatPassword: "",
+            redirect: false
         };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleLoginInput = this.handleLoginInput.bind(this);
@@ -86,11 +88,14 @@ export default class RegWarehouseManager extends Component {
                 role: 'Менеджер склада'
             },
             success: function (dataFromServer) {
-                if (dataFromServer['ErrorInfo'] === undefined) {
+                if (dataFromServer['ErrorInfo'] === "") {
+                    this.setState({
+                        redirect: true,
+                    });
                     return;
                 }
                 RegWarehouseManager.errorInfo('loginInfo', dataFromServer['ErrorInfo'], 'inputLogin');
-            }
+            }.bind(this)
         });
     }
 
@@ -183,6 +188,10 @@ export default class RegWarehouseManager extends Component {
     }
 
     render() {
+        console.log(this.state.redirect);
+        if (this.state.redirect) {
+            return <Redirect to='/regInfoPage/'/>;
+        }
         return (
             <div className="container center-block">
 
