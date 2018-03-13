@@ -3,8 +3,8 @@ package regWarehouseManager
 import (
 	"net/http"
 	"fmt"
-	. "../../connect"
-	. "../../utils"
+	. "../../../connect"
+	. "../../../utils"
 	"encoding/json"
 	"golang.org/x/crypto/bcrypt"
 )

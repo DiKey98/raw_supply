@@ -9,7 +9,7 @@ export default class Home extends Component {
             <div className="container">
                 <div className="btn-group-vertical center-block roles" role="group" aria-label="...">
                     <div id="inscription">Вход</div>
-                    <Link role="button" className="btn btn-primary btn-block role" to='/warehouseManager/'>
+                    <Link role="button" className="btn btn-primary btn-block role" to='/login/warehouseManager/'>
                         Менеджер склада
                     </Link>
                     <Link role="button" className="btn btn-primary btn-block role" to='/supplier/'>

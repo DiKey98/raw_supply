@@ -1,17 +1,18 @@
-package logoutadmin
+package logout
 
 import (
 	"net/http"
 	"github.com/gorilla/sessions"
 	"fmt"
-	. "../../../connect"
-	. "../../../utils"
+	. "../connect"
+	. "../utils"
 )
 
-var store = sessions.NewCookieStore([]byte("adminSessions"))
+var store = sessions.NewCookieStore([]byte("sessions"))
 
-func LogoutAdmin(rw http.ResponseWriter, req *http.Request) {
-	session, err := store.Get(req, "adminInfo")
+func Logout(rw http.ResponseWriter, req *http.Request) {
+	sessionName := req.FormValue("sessionName")
+	session, err := store.Get(req, sessionName)
 	if err != nil {
 		fmt.Println(err)
 		return

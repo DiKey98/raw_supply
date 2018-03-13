@@ -1,32 +1,27 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
-import './RegWarehouseManager.css';
+import './LoginWarehouseManager.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import $ from 'jquery';
 import Constants from '../../config';
 import { Redirect } from 'react-router';
 
-export default class RegWarehouseManager extends Component {
+export default class LoginWarehouseManager extends Component {
     isValidLogin = false;
     isValidPassword = false;
+    redirect = true;
     constructor(props) {
         super(props);
         this.state = {
-            fio: "",
             login: "",
             password: "",
-            repeatPassword: "",
-            redirect: false
         };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleLoginInput = this.handleLoginInput.bind(this);
-        this.handleFIOInput = this.handleFIOInput.bind(this);
         this.handlePasswordInput = this.handlePasswordInput.bind(this);
-        this.handleRepeatPasswordInput = this.handleRepeatPasswordInput.bind(this);
         this.validateLogin = this.validateLogin.bind(this);
         this.validatePassword = this.validatePassword.bind(this);
-        this.validateFIO = this.validateFIO.bind(this);
-        RegWarehouseManager.errorInfo = RegWarehouseManager.errorInfo.bind(this);
+        LoginWarehouseManager.errorInfo = LoginWarehouseManager.errorInfo.bind(this);
     }
 
     componentDidMount() {
@@ -71,21 +66,19 @@ export default class RegWarehouseManager extends Component {
 
     handleSubmit(event) {
         event.preventDefault();
-        this.validateFIO();
         this.validateLogin();
         this.validatePassword();
         if (!this.isValidLogin || !this.isValidPassword) {
             return;
         }
         $.ajax({
-            url: '/regWarehouseManager/',
+            url: '/loginWarehouseManager/',
             method: 'POST',
             dataType: 'JSON',
             data: {
-                fio: this.state.fio,
                 login: this.state.login,
                 password: this.state.password,
-                role: 'Менеджер склада'
+                role: "Менеджер склада"
             },
             success: function (dataFromServer) {
                 if (dataFromServer['ErrorInfo'] === "") {
@@ -94,14 +87,18 @@ export default class RegWarehouseManager extends Component {
                     });
                     return;
                 }
-                RegWarehouseManager.errorInfo('loginInfo', dataFromServer['ErrorInfo'], 'inputLogin');
+                if (dataFromServer['ErrorLogin'] !== "") {
+                    LoginWarehouseManager.errorInfo('loginInfo', dataFromServer['ErrorLogin'], 'inputLogin');
+                    return;
+                }
+                if (dataFromServer['ErrorPassword'] !== "") {
+                    LoginWarehouseManager.errorInfo('passwordInfo', dataFromServer['ErrorPassword'], 'inputPassword');
+                    return;
+                }
+                if (dataFromServer['ErrorRole'] !== "") {
+                    LoginWarehouseManager.errorInfo('loginInfo', dataFromServer['ErrorRole'], 'inputLogin');
+                }
             }.bind(this)
-        });
-    }
-
-    handleFIOInput(event) {
-        this.setState({
-            fio: event.target.value
         });
     }
 
@@ -117,38 +114,26 @@ export default class RegWarehouseManager extends Component {
         });
     }
 
-    handleRepeatPasswordInput(event) {
-        this.setState({
-            repeatPassword: event.target.value
-        });
-    }
-
-    validateFIO() {
-        if (this.state.fio.length === 0) {
-            RegWarehouseManager.errorInfo('fioInfo', 'Не введено ФИО', 'inputFIO');
-        }
-    }
-
     validateLogin() {
         if (this.state.login.length === 0) {
-            RegWarehouseManager.errorInfo('loginInfo', 'Не введён логин', 'inputLogin');
+            LoginWarehouseManager.errorInfo('loginInfo', 'Не введён логин', 'inputLogin');
             this.isValidLogin = false;
             return;
         }
         if (this.state.login.length > Constants.maxLoginLength) {
-            RegWarehouseManager.errorInfo('loginInfo',
+            LoginWarehouseManager.errorInfo('loginInfo',
                 `Максимальная длина логина ${Constants.maxLoginLength} символов`, 'inputLogin');
             this.isValidLogin = false;
             return;
         }
         if (this.state.login.length < Constants.minLoginLength) {
-            RegWarehouseManager.errorInfo('loginInfo',
+            LoginWarehouseManager.errorInfo('loginInfo',
                 `Минимальная длина логина ${Constants.minLoginLength} символов`, 'inputLogin');
             this.isValidLogin = false;
             return;
         }
         if (this.state.login.match(Constants.loginRegexp) != this.state.login) {
-            RegWarehouseManager.errorInfo('loginInfo', 'Некорректный логин', 'inputLogin');
+            LoginWarehouseManager.errorInfo('loginInfo', 'Некорректный логин', 'inputLogin');
             this.isValidLogin = false;
             return;
         }
@@ -157,30 +142,24 @@ export default class RegWarehouseManager extends Component {
 
     validatePassword() {
         if (this.state.password.length === 0) {
-            RegWarehouseManager.errorInfo('passwordInfo', 'Не введён пароль', 'inputPassword');
+            LoginWarehouseManager.errorInfo('passwordInfo', 'Не введён пароль', 'inputPassword');
             this.isValidPassword = false;
             return;
         }
         if (this.state.password.length > Constants.maxPassLength) {
-            RegWarehouseManager.errorInfo('passwordInfo',
+            LoginWarehouseManager.errorInfo('passwordInfo',
                 `Максимальная длина пароля ${Constants.maxPassLength} символов`, 'inputPassword');
             this.isValidPassword = false;
             return;
         }
         if (this.state.password.length < Constants.minPassLength) {
-            RegWarehouseManager.errorInfo('passwordInfo',
+            LoginWarehouseManager.errorInfo('passwordInfo',
                 `Минимальная длина пароля ${Constants.minPassLength} символов`, 'inputPassword');
             this.isValidPassword = false;
             return;
         }
         if (this.state.password.match(Constants.passRegexp) != this.state.password) {
-            RegWarehouseManager.errorInfo('passwordInfo', 'Некорректный пароль', 'inputPassword');
-            this.isValidPassword = false;
-            return;
-        }
-        if (this.state.repeatPassword !== this.state.password) {
-            RegWarehouseManager.errorInfo('passwordInfo', 'Пароли не совпадают', 'inputPassword',
-                'repeatPasswordInfo', 'repeatInputPassword');
+            LoginWarehouseManager.errorInfo('passwordInfo', 'Некорректный пароль', 'inputPassword');
             this.isValidPassword = false;
             return;
         }
@@ -188,24 +167,12 @@ export default class RegWarehouseManager extends Component {
     }
 
     render() {
-        if (this.state.redirect) {
-            return <Redirect to='/regInfoPage/'/>;
-        }
         return (
             <div className="container center-block">
 
-                <div id="inscriptionRegManager">Регистрация менеджера склада</div>
+                <div id="inscriptionRegManager">Вход для менеджера склада</div>
 
                 <form id='regForm' onSubmit={this.handleSubmit}>
-
-                    <div className="form-group">
-                        <label htmlFor="inputFIO">
-                            ФИО:
-                        </label>
-                        <input type="text" onChange={this.handleFIOInput} className="form-control"
-                               id="inputFIO" placeholder="Введите ФИО"/>
-                        <p id="fioInfo" className="errorInfo"/>
-                    </div>
 
                     <div className="form-group">
                         <label htmlFor="inputLogin">
@@ -225,17 +192,8 @@ export default class RegWarehouseManager extends Component {
                         <p id="passwordInfo" className="errorInfo"/>
                     </div>
 
-                    <div className="form-group">
-                        <label htmlFor="inputEmail">
-                            Повтор пароля:
-                        </label>
-                        <input type="password" onChange={this.handleRepeatPasswordInput} className="form-control"
-                               id="repeatInputPassword" placeholder="Повторите пароль"/>
-                        <p id="repeatPasswordInfo" className="errorInfo"/>
-                    </div>
-
                     <button id="regButton" type="submit" className="btn btn-default">
-                        Регистрация
+                        Войти
                     </button>
 
                 </form>

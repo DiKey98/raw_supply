@@ -9,12 +9,13 @@ import (
 	"fmt"
 	"github.com/chasex/glog"
 	. "./connect"
-	. "./httphandlers/regwarehousemanager"
+	. "./httphandlers/warehousemanager/regwarehousemanager"
 	. "./httphandlers/admin/loginadmin"
 	. "./httphandlers/getunverifiedusers"
-	. "./httphandlers/admin/logoutadmin"
+	. "./logout"
 	. "./httphandlers/unverifiedwarehousemangers/confirm"
 	. "./httphandlers/unverifiedwarehousemangers/delete"
+	. "./httphandlers/warehousemanager/loginwarehousemanager"
 	"time"
 )
 
@@ -59,12 +60,17 @@ func main() {
 	}
 
 	http.Handle("/", http.FileServer(http.Dir("./build")))
+
 	http.HandleFunc("/regWarehouseManager/", RegWarehouseManager)
-	http.HandleFunc("/loginAdmin/", LoginAdmin)
-	http.HandleFunc("/logoutAdmin/", LogoutAdmin)
-	http.HandleFunc("/getUnverifiedUsers/", GetUnverifiedUsers)
 	http.HandleFunc("/confirmWarehouseManager/", ConfirmWarehouseManager)
 	http.HandleFunc("/deleteWarehouseManager/", DeleteUnverifiedWarehouseManager)
+	http.HandleFunc("/loginWarehouseManager/", LoginWarehouseManager)
+	http.HandleFunc("/logoutWarehouseManager/", Logout)
+
+	http.HandleFunc("/loginAdmin/", LoginAdmin)
+	http.HandleFunc("/logoutAdmin/", Logout)
+
+	http.HandleFunc("/getUnverifiedUsers/", GetUnverifiedUsers)
 
 	http.ListenAndServe(Config.Server.Port, context.ClearHandler(http.DefaultServeMux))
 }

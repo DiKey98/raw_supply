@@ -14,6 +14,7 @@ type User struct {
 	Login    string
 	Password string
 	IsAdmin  bool
+	Role int
 }
 
 type UnverifiedUser struct {
@@ -57,19 +58,43 @@ func WriteToLog(str string) {
 }
 
 func GetUserByLogin(login string, table string) (*User) {
-	query := fmt.Sprintf(`SELECT "ID", "Login", "Password", "Is_Admin" FROM "%s" WHERE "Login" = $1`, table)
+	query := fmt.Sprintf(`SELECT "ID", "Login", "Password", "Is_Admin", "Role" FROM "%s" WHERE "Login" = $1`, table)
 	rows, err := DB.Query(query, login)
 	if err != nil {
-		return &User{0, "", "", false}
+		return &User{0, "", "", false, 0}
 	}
 	defer rows.Close()
 
-	user := User{0, "", "", false}
+	user := User{0, "", "", false,0}
 	for rows.Next() {
-		err = rows.Scan(&user.ID, &user.Login, &user.Password, &user.IsAdmin)
+		err = rows.Scan(&user.ID, &user.Login, &user.Password, &user.IsAdmin, &user.Role)
 		if err != nil {
-			return &User{0, "", "", false}
+			return &User{0, "", "", false, 0}
 		}
 	}
 	return &user
+}
+
+func GetIdRoleByName(roleName string) (int) {
+	query := `
+	SELECT "ID"
+	FROM "Role"
+	WHERE "Name" = $1`
+
+	rows, err := DB.Query(query, roleName)
+	if err != nil {
+		fmt.Println(err)
+		return 0
+	}
+	defer rows.Close()
+
+	result := 0
+	for rows.Next() {
+		err = rows.Scan(&result)
+		if err != nil {
+			fmt.Println(err)
+			return 0
+		}
+	}
+	return result
 }

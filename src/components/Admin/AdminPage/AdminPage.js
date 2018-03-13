@@ -93,7 +93,9 @@ export default class AdminPage extends React.Component {
             )
         }
         return (
-            <div ref={(AdminPage)=>{this.domNode = AdminPage;}}>
+            <div ref={(AdminPage) => {
+                this.domNode = AdminPage;
+            }}>
                 <div id="unverifiedUsersContainer" className="container center-block">
                 </div>
             </div>
@@ -101,7 +103,7 @@ export default class AdminPage extends React.Component {
     }
 };
 
-class Block extends React.Component {
+class UnverifiedUser extends React.Component {
     constructor(props) {
         super(props);
         this.confirmUser = this.confirmUser.bind(this);
@@ -134,7 +136,9 @@ class Block extends React.Component {
 
     render() {
         return (
-            <div id={`manager${this.props.number}`} className="unverifiedUser" ref={(Block)=>{this.domNode = Block;}}>
+            <div id={`manager${this.props.number}`} className="unverifiedUser" ref={(Block) => {
+                this.domNode = Block;
+            }}>
 
                 <div className="usersData" id={this.props.idData}>
                     {AdminPage.stringFromJSON(this.props.data)}
@@ -158,12 +162,12 @@ class UnverifiedUsersList extends React.Component {
 
     render() {
         const listItems = this.props.numbers.map((i) =>
-            <Block key={i}
-                   idData={this.props.idData[i]}
-                   idConfirm={this.props.idConfirm[i]}
-                   idDelete={this.props.idDelete[i]}
-                   data={this.props.data[i]}
-                   number={i}/>
+            <UnverifiedUser key={i}
+                            idData={this.props.idData[i]}
+                            idConfirm={this.props.idConfirm[i]}
+                            idDelete={this.props.idDelete[i]}
+                            data={this.props.data[i]}
+                            number={i}/>
         );
         return (
             <div id="undefinedUsersList">{listItems}</div>
