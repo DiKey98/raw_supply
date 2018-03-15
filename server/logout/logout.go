@@ -6,23 +6,26 @@ import (
 	"fmt"
 	. "../connect"
 	. "../utils"
+	"encoding/json"
 )
 
 var store = sessions.NewCookieStore([]byte("sessions"))
 
 func Logout(rw http.ResponseWriter, req *http.Request) {
 	sessionName := req.FormValue("sessionName")
+	role := req.FormValue("role")
+
 	session, err := store.Get(req, sessionName)
 	if err != nil {
-		fmt.Println(err)
 		return
 	}
 
-	if session.Values["id_session"] == nil {
+	authenticated := fmt.Sprintf("authenticated_for_%s", role)
+	if session.Values[authenticated] == nil {
 		return
 	}
 
-	idSession := session.Values["id_session"].(string)
+	idSession := session.Values[fmt.Sprintf("id_session_for_%s", role)].(string)
 
 	query := `
 	DELETE
@@ -32,9 +35,11 @@ func Logout(rw http.ResponseWriter, req *http.Request) {
 	_,err = DB.Exec(query, idSession)
 	if err != nil {
 		WriteToLog(err.Error())
-		fmt.Println(err)
 	}
 
 	session.Options.MaxAge = 0
 	session.Save(req, rw)
+
+	jsonRes, _ := json.Marshal(map[string]interface{} {"OK" : true})
+	Response(rw, req, nil, http.StatusOK, jsonRes)
 }
