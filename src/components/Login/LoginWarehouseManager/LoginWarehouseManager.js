@@ -10,6 +10,7 @@ export default class LoginWarehouseManager extends Component {
     isValidLogin = false;
     isValidPassword = false;
     redirect = true;
+
     constructor(props) {
         super(props);
         this.state = {
@@ -78,7 +79,7 @@ export default class LoginWarehouseManager extends Component {
             data: {
                 login: this.state.login,
                 password: this.state.password,
-                role: "Менеджер склада"
+                role: Constants.warehouseManagerRole,
             },
             success: function (dataFromServer) {
                 if (dataFromServer['ErrorInfo'] === "") {

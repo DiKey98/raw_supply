@@ -6,5 +6,9 @@ module.exports = {
     minPassLength: 5,
 
     loginRegexp: /[A-Za-z]\w{3,9}/,
-    passRegexp: /\w*/
+    passRegexp: /\w*/,
+
+    adminRole: "Admin",
+    adminSession: "adminSession",
+    warehouseManagerRole: "Менеджер склада",
 };

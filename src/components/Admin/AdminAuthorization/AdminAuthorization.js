@@ -5,14 +5,18 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import $ from 'jquery';
 import Cookies from 'universal-cookie';
 import {Redirect} from 'react-router-dom';
+import Constants from '../../config';
 
 export default class AdminAuthorization extends React.Component {
     cookies = new Cookies();
+    redirect = false;
+
     constructor(props) {
         super(props);
         this.state = {
             login: "",
-            password: ""
+            password: "",
+            redirect: false,
         };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleLoginInput = this.handleLoginInput.bind(this);
@@ -82,27 +86,38 @@ export default class AdminAuthorization extends React.Component {
             dataType: 'JSON',
             data: {
                 login: this.state.login,
-                password: this.state.password
+                password: this.state.password,
+                role: Constants.adminRole,
+                sessionName: Constants.adminSession,
             },
             success: function (dataFromServer) {
-                if (dataFromServer['ErrorLogin'].length !== 0) {
+                if (dataFromServer['ErrorLogin'] !== "") {
                     AdminAuthorization.errorInfo('loginAdminInfo',
                         dataFromServer['ErrorLogin'], 'inputAdminLogin');
+                    return;
                 }
                 if (dataFromServer['ErrorPassword'] !== "") {
                     AdminAuthorization.errorInfo('passwordAdminInfo',
                         dataFromServer['ErrorPassword'], 'inputAdminPassword');
+                    return;
                 }
-                if (dataFromServer['adminAuthenticated']) {
-                    this.cookies.set('adminAuthenticated', true, { path: '/' });
-                    this.forceUpdate();
+                if (dataFromServer['ErrorRole'] !== "") {
+                    AdminAuthorization.errorInfo('loginAdminInfo',
+                        dataFromServer['ErrorRole'], 'inputAdminLogin');
                 }
+                this.redirect = true;
+                this.forceUpdate();
             }.bind(this)
         });
     }
 
     render() {
-        if (this.cookies.get('adminAuthenticated') !== undefined) {
+        if (this.redirect) {
+            return (
+                <Redirect to='/admin/page/'/>
+            )
+        }
+        if (this.cookies.get(Constants.adminSession) !== undefined) {
             return (
                 <Redirect to='/admin/page/'/>
             )

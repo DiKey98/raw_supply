@@ -10,12 +10,13 @@ import (
 	"github.com/chasex/glog"
 	. "./connect"
 	. "./httphandlers/warehousemanager/regwarehousemanager"
-	. "./httphandlers/admin/loginadmin"
+	//. "./httphandlers/admin/loginadmin"
 	. "./httphandlers/getunverifiedusers"
 	. "./logout"
+	. "./login"
 	. "./httphandlers/unverifiedwarehousemangers/confirm"
 	. "./httphandlers/unverifiedwarehousemangers/delete"
-	. "./httphandlers/warehousemanager/loginwarehousemanager"
+	//. "./httphandlers/warehousemanager/loginwarehousemanager"
 	"time"
 )
 
@@ -64,10 +65,10 @@ func main() {
 	http.HandleFunc("/regWarehouseManager/", RegWarehouseManager)
 	http.HandleFunc("/confirmWarehouseManager/", ConfirmWarehouseManager)
 	http.HandleFunc("/deleteWarehouseManager/", DeleteUnverifiedWarehouseManager)
-	http.HandleFunc("/loginWarehouseManager/", LoginWarehouseManager)
+	http.HandleFunc("/loginWarehouseManager/", Login)
 	http.HandleFunc("/logoutWarehouseManager/", Logout)
 
-	http.HandleFunc("/loginAdmin/", LoginAdmin)
+	http.HandleFunc("/loginAdmin/", Login)
 	http.HandleFunc("/logoutAdmin/", Logout)
 
 	http.HandleFunc("/getUnverifiedUsers/", GetUnverifiedUsers)
