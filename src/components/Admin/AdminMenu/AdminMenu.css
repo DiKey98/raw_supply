@@ -1,0 +1,10 @@
+#adminMenu {
+    display: inline-block !important;
+    position: fixed !important;
+}
+
+.adminMenuButtons {
+    font-size: 15px !important;
+    font-weight: bold !important;
+    color: black !important;
+}
