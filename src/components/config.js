@@ -11,4 +11,5 @@ module.exports = {
     adminRole: "Admin",
     adminSession: "adminSession",
     warehouseManagerRole: "Менеджер склада",
+    warehouseManagerSession: "warehouseManagerSession",
 };

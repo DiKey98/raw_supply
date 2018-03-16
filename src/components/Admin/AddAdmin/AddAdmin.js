@@ -4,7 +4,8 @@ import $ from 'jquery';
 import Cookies from 'universal-cookie';
 import {Redirect} from 'react-router-dom';
 import Constants from '../../config';
-import AdminMenu from "../AdminMenu/AdminMenu";
+import AdminMenu from '../AdminMenu/AdminMenu';
+import Utils from '../../Utils';
 
 let cookies = new Cookies();
 
@@ -22,38 +23,9 @@ export default class AddAdmin extends Component {
             redirect: false,
         };
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
         this.handleLoginInput = this.handleLoginInput.bind(this);
         this.handlePasswordInput = this.handlePasswordInput.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
         this.handleRepeatPasswordInput = this.handleRepeatPasswordInput.bind(this);
-        AddAdmin.errorInfo = AddAdmin.errorInfo.bind(this);
-    }
-
-    static errorInfo(idInfoElement, text) {
-        $(`#${idInfoElement}`).text(text).css({
-            visibility: 'visible'
-        });
-        if (arguments.length < 3) {
-            return;
-        }
-        $(`#${arguments[2]}`).css({
-            borderWidth: '3px',
-            borderColor: 'red'
-        });
-        if (arguments.length < 4) {
-            return;
-        }
-        $(`#${arguments[3]}`).text(text).css({
-            visibility: 'visible',
-        });
-        if (arguments.length < 5) {
-            return;
-        }
-        $(`#${arguments[4]}`).text(text).css({
-            borderWidth: '3px',
-            borderColor: 'red'
-        });
     }
 
     componentDidMount() {
@@ -72,8 +44,9 @@ export default class AddAdmin extends Component {
 
     handleSubmit(event) {
         event.preventDefault();
-        this.validateLogin();
-        this.validatePassword();
+        this.isValidLogin = Utils.validateLogin(this.state.login, 'loginAdminInfo', 'inputAdminLogin');
+        this.isValidPassword = Utils.validatePassword(this.state.password, 'passwordAdminInfo', 'inputAdminPassword',
+            this.state.repeatPassword, 'repeatPasswordAdminInfo', 'repeatInputAdminPassword');
         if (!this.isValidLogin || !this.isValidPassword) {
             return;
         }
@@ -95,9 +68,10 @@ export default class AddAdmin extends Component {
                     });
                     this.isValidLogin = false;
                     this.isValidPassword = false;
+                    $('#adminLoginForm').trigger('reset');
                     return;
                 }
-                AddAdmin.errorInfo('loginInfo', dataFromServer['ErrorInfo'], 'inputLogin');
+                //Utils.errorInfo('loginAdminInfo', dataFromServer['ErrorInfo'], 'inputAdminLogin');
             }.bind(this)
         });
     }
@@ -118,64 +92,6 @@ export default class AddAdmin extends Component {
         this.setState({
             repeatPassword: event.target.value
         });
-    }
-
-    validateLogin() {
-        if (this.state.login.length === 0) {
-            AddAdmin.errorInfo('loginInfo', 'Не введён логин', 'inputLogin');
-            this.isValidLogin = false;
-            return;
-        }
-        if (this.state.login.length > Constants.maxLoginLength) {
-            AddAdmin.errorInfo('loginInfo',
-                `Максимальная длина логина ${Constants.maxLoginLength} символов`, 'inputLogin');
-            this.isValidLogin = false;
-            return;
-        }
-        if (this.state.login.length < Constants.minLoginLength) {
-            AddAdmin.errorInfo('loginInfo',
-                `Минимальная длина логина ${Constants.minLoginLength} символов`, 'inputLogin');
-            this.isValidLogin = false;
-            return;
-        }
-        if (this.state.login.match(Constants.loginRegexp) != this.state.login) {
-            AddAdmin.errorInfo('loginInfo', 'Некорректный логин', 'inputLogin');
-            this.isValidLogin = false;
-            return;
-        }
-        this.isValidLogin = true;
-    }
-
-    validatePassword() {
-        if (this.state.password.length === 0) {
-            AddAdmin.errorInfo('passwordInfo', 'Не введён пароль', 'inputPassword');
-            this.isValidPassword = false;
-            return;
-        }
-        if (this.state.password.length > Constants.maxPassLength) {
-            AddAdmin.errorInfo('passwordInfo',
-                `Максимальная длина пароля ${Constants.maxPassLength} символов`, 'inputPassword');
-            this.isValidPassword = false;
-            return;
-        }
-        if (this.state.password.length < Constants.minPassLength) {
-            AddAdmin.errorInfo('passwordInfo',
-                `Минимальная длина пароля ${Constants.minPassLength} символов`, 'inputPassword');
-            this.isValidPassword = false;
-            return;
-        }
-        if (this.state.password.match(Constants.passRegexp) != this.state.password) {
-            AddAdmin.errorInfo('passwordInfo', 'Некорректный пароль', 'inputPassword');
-            this.isValidPassword = false;
-            return;
-        }
-        if (this.state.repeatPassword !== this.state.password) {
-            AddAdmin.errorInfo('passwordAdminInfo', 'Пароли не совпадают', 'inputAdminPassword',
-                'repeatPasswordAdminInfo', 'repeatInputAdminPassword');
-            this.isValidPassword = false;
-            return;
-        }
-        this.isValidPassword = true;
     }
 
     render() {

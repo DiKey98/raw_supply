@@ -1,24 +1,21 @@
-package regWarehouseManager
+package addadmin
 
 import (
 	"net/http"
-	"fmt"
-	. "../../../connect"
-	. "../../../utils"
 	"encoding/json"
 	"golang.org/x/crypto/bcrypt"
+	. "../../../utils"
+	. "../../../connect"
 )
 
-func RegWarehouseManager(rw http.ResponseWriter, req *http.Request) {
+func AddAdmin(rw http.ResponseWriter, req *http.Request) {
 	login := req.FormValue("login")
 	password := req.FormValue("password")
-	fio := req.FormValue("fio")
 	role := req.FormValue("role")
 
-	WriteToLog(fmt.Sprintf("Запрос на регистрацию %s от пользователя %s с логином %s", role, fio, login))
+	roleId := GetIdRoleByName(role)
 
-	if IsContains(DB, "Unverified_Users", login) ||
-		IsContains(DB, "Users", login) {
+	if IsContains(DB, "Users", login) {
 		res, _ := json.Marshal(map[string]interface{}{"OK": false, "ErrorInfo": "Указанный логин уже существует"})
 		Response(rw, req, nil, http.StatusOK, res)
 		return
@@ -31,10 +28,10 @@ func RegWarehouseManager(rw http.ResponseWriter, req *http.Request) {
 	}
 
 	query := `
-	INSERT INTO "Unverified_Users"("FIO", "Login", "Password", "Role")
-	VALUES ($1, $2, $3, $4)`
+	INSERT INTO "Users"("FIO", "Login", "Password", "Role", "Is_Admin")
+	VALUES ($1, $2, $3, $4, $5)`
 
-	_, err = DB.Exec(query, fio, login, string(hash), role)
+	_, err = DB.Exec(query, "Admin", login, string(hash), roleId, true)
 	if err != nil {
 		WriteToLog(err.Error())
 		return

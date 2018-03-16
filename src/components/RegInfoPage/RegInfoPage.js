@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './RegInfoPage.css'
-import $ from 'jquery';
 
 export default class RegInfoPage extends Component {
     render() {

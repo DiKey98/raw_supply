@@ -15,6 +15,7 @@ type User struct {
 	Password string
 	IsAdmin  bool
 	Role int
+	Organization sql.NullInt64
 }
 
 type UnverifiedUser struct {
@@ -61,15 +62,15 @@ func GetUserByLogin(login string, table string) (*User) {
 	query := fmt.Sprintf(`SELECT "ID", "Login", "Password", "Is_Admin", "Role" FROM "%s" WHERE "Login" = $1`, table)
 	rows, err := DB.Query(query, login)
 	if err != nil {
-		return &User{0, "", "", false, 0}
+		return &User{0, "", "", false, 0, sql.NullInt64{0, false}}
 	}
 	defer rows.Close()
 
-	user := User{0, "", "", false,0}
+	user := User{0, "", "", false,0, sql.NullInt64{0, false}}
 	for rows.Next() {
 		err = rows.Scan(&user.ID, &user.Login, &user.Password, &user.IsAdmin, &user.Role)
 		if err != nil {
-			return &User{0, "", "", false, 0}
+			return &User{0, "", "", false, 0, sql.NullInt64{0, false}}
 		}
 	}
 	return &user
@@ -83,7 +84,7 @@ func GetIdRoleByName(roleName string) (int) {
 
 	rows, err := DB.Query(query, roleName)
 	if err != nil {
-		fmt.Println(err)
+		WriteToLog(err.Error())
 		return 0
 	}
 	defer rows.Close()
@@ -92,9 +93,49 @@ func GetIdRoleByName(roleName string) (int) {
 	for rows.Next() {
 		err = rows.Scan(&result)
 		if err != nil {
-			fmt.Println(err)
+			WriteToLog(err.Error())
 			return 0
 		}
 	}
 	return result
+}
+
+func GetIdSupplierByINN(inn string) (int64) {
+	query := `
+	SELECT "ID"
+	FROM "Suppliers"
+	WHERE "INN" = $1`
+
+	rows, err := DB.Query(query, inn)
+	if err != nil {
+		WriteToLog(err.Error())
+		return 0
+	}
+	defer rows.Close()
+
+	var result int64 = 0
+	for rows.Next() {
+		err = rows.Scan(&result)
+		if err != nil {
+			WriteToLog(err.Error())
+			return 0
+		}
+	}
+	return result
+}
+
+func IsAuthorized(id int, role int) (bool) {
+	query := `
+	SELECT "ID_User"
+	FROM "Authorization"
+	WHERE "ID_User" = $1 AND "Role" = $2`
+
+	rows, err := DB.Query(query, id, role)
+	if err != nil {
+		WriteToLog(err.Error())
+		return false
+	}
+	defer rows.Close()
+
+	return rows.Next()
 }

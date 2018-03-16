@@ -4,11 +4,6 @@ import {Link} from 'react-router-dom';
 import './AdminMenu.css'
 
 export default class AdminMenu extends Component {
-    constructor(props) {
-        super(props);
-
-    }
-
     render() {
         return (
             <div id="adminMenu">

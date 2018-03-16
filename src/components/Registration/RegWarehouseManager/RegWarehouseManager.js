@@ -5,10 +5,13 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import $ from 'jquery';
 import Constants from '../../config';
 import { Redirect } from 'react-router';
+import Utils from '../../Utils';
 
 export default class RegWarehouseManager extends Component {
     isValidLogin = false;
     isValidPassword = false;
+    isValidFio = false;
+
     constructor(props) {
         super(props);
         this.state = {
@@ -23,10 +26,6 @@ export default class RegWarehouseManager extends Component {
         this.handleFIOInput = this.handleFIOInput.bind(this);
         this.handlePasswordInput = this.handlePasswordInput.bind(this);
         this.handleRepeatPasswordInput = this.handleRepeatPasswordInput.bind(this);
-        this.validateLogin = this.validateLogin.bind(this);
-        this.validatePassword = this.validatePassword.bind(this);
-        this.validateFIO = this.validateFIO.bind(this);
-        RegWarehouseManager.errorInfo = RegWarehouseManager.errorInfo.bind(this);
     }
 
     componentDidMount() {
@@ -43,38 +42,13 @@ export default class RegWarehouseManager extends Component {
         });
     }
 
-    static errorInfo(idInfoElement, text) {
-        $(`#${idInfoElement}`).text(text).css({
-            visibility: 'visible'
-        });
-        if (arguments.length < 3) {
-            return;
-        }
-        $(`#${arguments[2]}`).css({
-            borderWidth: '3px',
-            borderColor: 'red'
-        });
-        if (arguments.length < 4) {
-            return;
-        }
-        $(`#${arguments[3]}`).text(text).css({
-            visibility: 'visible',
-        });
-        if (arguments.length < 5) {
-            return;
-        }
-        $(`#${arguments[4]}`).text(text).css({
-            borderWidth: '3px',
-            borderColor: 'red'
-        });
-    }
-
     handleSubmit(event) {
         event.preventDefault();
-        this.validateFIO();
-        this.validateLogin();
-        this.validatePassword();
-        if (!this.isValidLogin || !this.isValidPassword) {
+        this.isValidFio = Utils.validateFIO(this.state.fio, 'fioInfo', 'inputFIO');
+        this.isValidLogin = Utils.validateLogin(this.state.login, 'loginInfo', 'inputLogin');
+        this.isValidPassword = Utils.validatePassword(this.state.password, 'passwordInfo', 'inputPassword',
+            this.state.repeatPassword, 'repeatPasswordInfo', 'repeatInputPassword');
+        if (!this.isValidLogin || !this.isValidPassword || !this.isValidFio) {
             return;
         }
         $.ajax({
@@ -85,7 +59,7 @@ export default class RegWarehouseManager extends Component {
                 fio: this.state.fio,
                 login: this.state.login,
                 password: this.state.password,
-                role: 'Менеджер склада'
+                role: Constants.warehouseManagerRole,
             },
             success: function (dataFromServer) {
                 if (dataFromServer['ErrorInfo'] === "") {
@@ -94,7 +68,7 @@ export default class RegWarehouseManager extends Component {
                     });
                     return;
                 }
-                RegWarehouseManager.errorInfo('loginInfo', dataFromServer['ErrorInfo'], 'inputLogin');
+                Utils.errorInfo('loginInfo', dataFromServer['ErrorInfo'], 'inputLogin');
             }.bind(this)
         });
     }
@@ -121,70 +95,6 @@ export default class RegWarehouseManager extends Component {
         this.setState({
             repeatPassword: event.target.value
         });
-    }
-
-    validateFIO() {
-        if (this.state.fio.length === 0) {
-            RegWarehouseManager.errorInfo('fioInfo', 'Не введено ФИО', 'inputFIO');
-        }
-    }
-
-    validateLogin() {
-        if (this.state.login.length === 0) {
-            RegWarehouseManager.errorInfo('loginInfo', 'Не введён логин', 'inputLogin');
-            this.isValidLogin = false;
-            return;
-        }
-        if (this.state.login.length > Constants.maxLoginLength) {
-            RegWarehouseManager.errorInfo('loginInfo',
-                `Максимальная длина логина ${Constants.maxLoginLength} символов`, 'inputLogin');
-            this.isValidLogin = false;
-            return;
-        }
-        if (this.state.login.length < Constants.minLoginLength) {
-            RegWarehouseManager.errorInfo('loginInfo',
-                `Минимальная длина логина ${Constants.minLoginLength} символов`, 'inputLogin');
-            this.isValidLogin = false;
-            return;
-        }
-        if (this.state.login.match(Constants.loginRegexp) != this.state.login) {
-            RegWarehouseManager.errorInfo('loginInfo', 'Некорректный логин', 'inputLogin');
-            this.isValidLogin = false;
-            return;
-        }
-        this.isValidLogin = true;
-    }
-
-    validatePassword() {
-        if (this.state.password.length === 0) {
-            RegWarehouseManager.errorInfo('passwordInfo', 'Не введён пароль', 'inputPassword');
-            this.isValidPassword = false;
-            return;
-        }
-        if (this.state.password.length > Constants.maxPassLength) {
-            RegWarehouseManager.errorInfo('passwordInfo',
-                `Максимальная длина пароля ${Constants.maxPassLength} символов`, 'inputPassword');
-            this.isValidPassword = false;
-            return;
-        }
-        if (this.state.password.length < Constants.minPassLength) {
-            RegWarehouseManager.errorInfo('passwordInfo',
-                `Минимальная длина пароля ${Constants.minPassLength} символов`, 'inputPassword');
-            this.isValidPassword = false;
-            return;
-        }
-        if (this.state.password.match(Constants.passRegexp) != this.state.password) {
-            RegWarehouseManager.errorInfo('passwordInfo', 'Некорректный пароль', 'inputPassword');
-            this.isValidPassword = false;
-            return;
-        }
-        if (this.state.repeatPassword !== this.state.password) {
-            RegWarehouseManager.errorInfo('passwordInfo', 'Пароли не совпадают', 'inputPassword',
-                'repeatPasswordInfo', 'repeatInputPassword');
-            this.isValidPassword = false;
-            return;
-        }
-        this.isValidPassword = true;
     }
 
     render() {

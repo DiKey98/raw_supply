@@ -6,10 +6,15 @@ import $ from 'jquery';
 import Cookies from 'universal-cookie';
 import {Redirect} from 'react-router-dom';
 import Constants from '../../config';
+import Utils from '../../Utils';
 
-export default class AdminAuthorization extends React.Component {
-    cookies = new Cookies();
+let cookies = new Cookies();
+
+export default class AdminAuthorization extends Component {
     redirect = false;
+
+    isValidLogin = false;
+    isValidPassword = false;
 
     constructor(props) {
         super(props);
@@ -21,34 +26,6 @@ export default class AdminAuthorization extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleLoginInput = this.handleLoginInput.bind(this);
         this.handlePasswordInput = this.handlePasswordInput.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-        AdminAuthorization.errorInfo = AdminAuthorization.errorInfo.bind(this);
-    }
-
-    static errorInfo(idInfoElement, text) {
-        $(`#${idInfoElement}`).text(text).css({
-            visibility: 'visible'
-        });
-        if (arguments.length < 3) {
-            return;
-        }
-        $(`#${arguments[2]}`).css({
-            borderWidth: '3px',
-            borderColor: 'red'
-        });
-        if (arguments.length < 4) {
-            return;
-        }
-        $(`#${arguments[3]}`).text(text).css({
-            visibility: 'visible',
-        });
-        if (arguments.length < 5) {
-            return;
-        }
-        $(`#${arguments[4]}`).text(text).css({
-            borderWidth: '3px',
-            borderColor: 'red'
-        });
     }
 
     componentDidMount() {
@@ -65,7 +42,6 @@ export default class AdminAuthorization extends React.Component {
         });
     }
 
-
     handleLoginInput(event) {
         this.setState({
             login: event.target.value
@@ -80,6 +56,11 @@ export default class AdminAuthorization extends React.Component {
 
     handleSubmit(event) {
         event.preventDefault();
+        this.isValidLogin = Utils.validateLogin(this.state.login, 'loginAdminInfo', 'inputAdminLogin');
+        this.isValidPassword = Utils.validatePassword(this.state.password, 'passwordAdminInfo', 'inputAdminPassword');
+        if (!this.isValidLogin || !this.isValidPassword) {
+            return;
+        }
         $.ajax({
             url: '/loginAdmin/',
             method: 'POST',
@@ -117,7 +98,7 @@ export default class AdminAuthorization extends React.Component {
                 <Redirect to='/admin/page/'/>
             )
         }
-        if (this.cookies.get(Constants.adminSession) !== undefined) {
+        if (cookies.get(Constants.adminSession) !== undefined) {
             return (
                 <Redirect to='/admin/page/'/>
             )

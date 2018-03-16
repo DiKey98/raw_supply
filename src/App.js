@@ -8,8 +8,9 @@ import AdminPage from './components/Admin/AdminPage/AdminPage';
 import AdminAuthorization from './components/Admin/AdminAuthorization/AdminAuthorization';
 import RegInfoPage from './components/RegInfoPage/RegInfoPage';
 import LoginWarehouseManager from './components/Login/LoginWarehouseManager/LoginWarehouseManager';
-import UnverifiedUsers from "./components/Admin/UnverifiedUsers/UnverifiedUsers";
+import UnverifiedUsers from './components/Admin/UnverifiedUsers/UnverifiedUsers';
 import AddAdmin from "./components/Admin/AddAdmin/AddAdmin";
+import WarehouseManagerMainPage from './components/MainPage/WarehouseManagerMainPage/WarehouseManagerMainPage';
 
 export default class App extends Component {
     render() {
@@ -32,6 +33,8 @@ export default class App extends Component {
                     <Route exact={true} path='/regInfoPage/' component={RegInfoPage}/>
 
                     <Route exact={true} path='/login/warehouseManager/' component={LoginWarehouseManager}/>
+
+                    <Route exact={true} path='/main/warehouseManager/' component={WarehouseManagerMainPage}/>
                 </Switch>
             </div>
         );

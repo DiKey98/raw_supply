@@ -80,11 +80,6 @@ class UnverifiedUser extends Component {
 }
 
 class UnverifiedUsersList extends Component {
-    constructor(props) {
-        super(props);
-
-    }
-
     render() {
         const listItems = this.props.numbers.map((i) =>
             <UnverifiedUser key={i}

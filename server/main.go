@@ -14,9 +14,10 @@ import (
 	. "./httphandlers/getunverifiedusers"
 	. "./logout"
 	. "./login"
-	. "./httphandlers/unverifiedwarehousemangers/confirm"
-	. "./httphandlers/unverifiedwarehousemangers/delete"
+	. "./httphandlers/warehousemanager/unverifiedwarehousemangers/confirm"
+	. "./httphandlers/warehousemanager/unverifiedwarehousemangers/delete"
 	//. "./httphandlers/warehousemanager/loginwarehousemanager"
+	. "./httphandlers/admin/addadmin"
 	"time"
 )
 
@@ -70,6 +71,7 @@ func main() {
 
 	http.HandleFunc("/loginAdmin/", Login)
 	http.HandleFunc("/logoutAdmin/", Logout)
+	http.HandleFunc("/addAdmin/", AddAdmin)
 
 	http.HandleFunc("/getUnverifiedUsers/", GetUnverifiedUsers)
 

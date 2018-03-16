@@ -4,12 +4,16 @@ import './LoginWarehouseManager.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import $ from 'jquery';
 import Constants from '../../config';
-import { Redirect } from 'react-router';
+import Utils from '../../Utils';
+import {Redirect} from 'react-router-dom';
+import Cookies from 'universal-cookie';
+
+let cookies = new Cookies();
 
 export default class LoginWarehouseManager extends Component {
     isValidLogin = false;
     isValidPassword = false;
-    redirect = true;
+    redirect = false;
 
     constructor(props) {
         super(props);
@@ -20,9 +24,6 @@ export default class LoginWarehouseManager extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleLoginInput = this.handleLoginInput.bind(this);
         this.handlePasswordInput = this.handlePasswordInput.bind(this);
-        this.validateLogin = this.validateLogin.bind(this);
-        this.validatePassword = this.validatePassword.bind(this);
-        LoginWarehouseManager.errorInfo = LoginWarehouseManager.errorInfo.bind(this);
     }
 
     componentDidMount() {
@@ -39,36 +40,10 @@ export default class LoginWarehouseManager extends Component {
         });
     }
 
-    static errorInfo(idInfoElement, text) {
-        $(`#${idInfoElement}`).text(text).css({
-            visibility: 'visible'
-        });
-        if (arguments.length < 3) {
-            return;
-        }
-        $(`#${arguments[2]}`).css({
-            borderWidth: '3px',
-            borderColor: 'red'
-        });
-        if (arguments.length < 4) {
-            return;
-        }
-        $(`#${arguments[3]}`).text(text).css({
-            visibility: 'visible',
-        });
-        if (arguments.length < 5) {
-            return;
-        }
-        $(`#${arguments[4]}`).text(text).css({
-            borderWidth: '3px',
-            borderColor: 'red'
-        });
-    }
-
     handleSubmit(event) {
         event.preventDefault();
-        this.validateLogin();
-        this.validatePassword();
+        this.isValidLogin = Utils.validateLogin(this.state.login, 'loginInfo', 'inputLogin');
+        this.isValidPassword = Utils.validatePassword(this.state.password, 'passwordInfo', 'inputPassword');
         if (!this.isValidLogin || !this.isValidPassword) {
             return;
         }
@@ -80,14 +55,9 @@ export default class LoginWarehouseManager extends Component {
                 login: this.state.login,
                 password: this.state.password,
                 role: Constants.warehouseManagerRole,
+                sessionName: Constants.warehouseManagerSession,
             },
             success: function (dataFromServer) {
-                if (dataFromServer['ErrorInfo'] === "") {
-                    this.setState({
-                        redirect: true,
-                    });
-                    return;
-                }
                 if (dataFromServer['ErrorLogin'] !== "") {
                     LoginWarehouseManager.errorInfo('loginInfo', dataFromServer['ErrorLogin'], 'inputLogin');
                     return;
@@ -98,7 +68,10 @@ export default class LoginWarehouseManager extends Component {
                 }
                 if (dataFromServer['ErrorRole'] !== "") {
                     LoginWarehouseManager.errorInfo('loginInfo', dataFromServer['ErrorRole'], 'inputLogin');
+                    return
                 }
+                this.redirect = true;
+                this.forceUpdate();
             }.bind(this)
         });
     }
@@ -115,59 +88,17 @@ export default class LoginWarehouseManager extends Component {
         });
     }
 
-    validateLogin() {
-        if (this.state.login.length === 0) {
-            LoginWarehouseManager.errorInfo('loginInfo', 'Не введён логин', 'inputLogin');
-            this.isValidLogin = false;
-            return;
-        }
-        if (this.state.login.length > Constants.maxLoginLength) {
-            LoginWarehouseManager.errorInfo('loginInfo',
-                `Максимальная длина логина ${Constants.maxLoginLength} символов`, 'inputLogin');
-            this.isValidLogin = false;
-            return;
-        }
-        if (this.state.login.length < Constants.minLoginLength) {
-            LoginWarehouseManager.errorInfo('loginInfo',
-                `Минимальная длина логина ${Constants.minLoginLength} символов`, 'inputLogin');
-            this.isValidLogin = false;
-            return;
-        }
-        if (this.state.login.match(Constants.loginRegexp) != this.state.login) {
-            LoginWarehouseManager.errorInfo('loginInfo', 'Некорректный логин', 'inputLogin');
-            this.isValidLogin = false;
-            return;
-        }
-        this.isValidLogin = true;
-    }
-
-    validatePassword() {
-        if (this.state.password.length === 0) {
-            LoginWarehouseManager.errorInfo('passwordInfo', 'Не введён пароль', 'inputPassword');
-            this.isValidPassword = false;
-            return;
-        }
-        if (this.state.password.length > Constants.maxPassLength) {
-            LoginWarehouseManager.errorInfo('passwordInfo',
-                `Максимальная длина пароля ${Constants.maxPassLength} символов`, 'inputPassword');
-            this.isValidPassword = false;
-            return;
-        }
-        if (this.state.password.length < Constants.minPassLength) {
-            LoginWarehouseManager.errorInfo('passwordInfo',
-                `Минимальная длина пароля ${Constants.minPassLength} символов`, 'inputPassword');
-            this.isValidPassword = false;
-            return;
-        }
-        if (this.state.password.match(Constants.passRegexp) != this.state.password) {
-            LoginWarehouseManager.errorInfo('passwordInfo', 'Некорректный пароль', 'inputPassword');
-            this.isValidPassword = false;
-            return;
-        }
-        this.isValidPassword = true;
-    }
-
     render() {
+        if (this.redirect) {
+            return (
+                <Redirect to='/main/warehouseManager/'/>
+            )
+        }
+        if (cookies.get(Constants.warehouseManagerSession) !== undefined) {
+            return (
+                <Redirect to='/main/warehouseManager/'/>
+            )
+        }
         return (
             <div className="container center-block">
 

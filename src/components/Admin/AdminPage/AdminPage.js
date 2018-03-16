@@ -12,10 +12,6 @@ let cookies = new Cookies();
 export default class AdminPage extends Component {
     redirectToMain = false;
 
-    constructor(props) {
-        super(props);
-    }
-
     componentDidMount() {
         $('#exitAdminButton').click(function () {
             $.ajax({

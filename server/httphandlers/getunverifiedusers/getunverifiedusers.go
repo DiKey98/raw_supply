@@ -11,7 +11,8 @@ import (
 func GetUnverifiedUsers(rw http.ResponseWriter, req *http.Request) {
 	query := `
 	SELECT "ID", "FIO", "Login", "Role"
-	FROM "Unverified_Users"`
+	FROM "Unverified_Users"
+	WHERE "Organization" IS NULL`
 
 	result := make([]UnverifiedUser, 0)
 

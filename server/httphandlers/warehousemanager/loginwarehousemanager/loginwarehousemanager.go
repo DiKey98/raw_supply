@@ -1,14 +1,14 @@
 package loginwarehousemanager
 
 import (
-	"net/http"
-	"encoding/json"
-	"golang.org/x/crypto/bcrypt"
-	"github.com/satori/go.uuid"
-	"github.com/gorilla/sessions"
-	. "../../../utils"
-	. "../../../connect"
-	"fmt"
+"net/http"
+"encoding/json"
+"golang.org/x/crypto/bcrypt"
+"github.com/satori/go.uuid"
+"github.com/gorilla/sessions"
+. "../../../utils"
+. "../../../connect"
+"fmt"
 )
 
 var store = sessions.NewCookieStore([]byte("sessions"))
@@ -39,15 +39,15 @@ func LoginWarehouseManager (rw http.ResponseWriter, req *http.Request) {
 	res["ErrorPassword"] = ""
 	res["ErrorRole"] = ""
 
-	if user.Role != roleId {
-		res["ErrorRole"] = fmt.Sprintf(`Указанный логин не относится к роли "%s"`, role)
+	if user.Login == "" {
+		res["ErrorLogin"] = "Неверный логин"
 		jsonRes, _ := json.Marshal(res)
 		Response(rw, req, nil, http.StatusOK, jsonRes)
 		return
 	}
 
-	if user.Login == "" {
-		res["ErrorLogin"] = "Неверный логин"
+	if user.Role != roleId {
+		res["ErrorRole"] = fmt.Sprintf(`Указанный логин не относится к роли "%s"`, role)
 		jsonRes, _ := json.Marshal(res)
 		Response(rw, req, nil, http.StatusOK, jsonRes)
 		return

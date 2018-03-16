@@ -17,17 +17,18 @@ func Login (rw http.ResponseWriter, req *http.Request) {
 	login := req.FormValue("login")
 	password := req.FormValue("password")
 	role := req.FormValue("role")
+	inn := req.FormValue("inn")
 	sessionName := req.FormValue("sessionName")
 
 	session, err := store.Get(req, sessionName)
 	if err != nil {
-		fmt.Println(err)
 		WriteToLog(err.Error())
 		http.Error(rw, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
 	authenticated := fmt.Sprintf("authenticated_for_%s", role)
+
 	if session.Values[authenticated] != nil {
 		if session.Values[authenticated].(bool) {
 			return
@@ -36,11 +37,25 @@ func Login (rw http.ResponseWriter, req *http.Request) {
 
 	user := GetUserByLogin(login, "Users")
 	roleId := GetIdRoleByName(role)
+	supplierId := GetIdSupplierByINN(inn)
+
+	if IsAuthorized(user.ID, user.Role) {
+		query := `
+		DELETE FROM "Authorization"
+		WHERE "ID_User" = $1 AND "Role" = $2`
+
+		_,err = DB.Exec(query, user.ID, user.Role)
+		if err != nil {
+			WriteToLog(err.Error())
+			return
+		}
+	}
 
 	res := make(map[string]interface{}, 0)
 	res["ErrorLogin"] = ""
 	res["ErrorPassword"] = ""
 	res["ErrorRole"] = ""
+	res["ErrorSupplier"] = ""
 
 	if user.Login == "" {
 		res["ErrorLogin"] = "Неверный логин"
@@ -54,6 +69,22 @@ func Login (rw http.ResponseWriter, req *http.Request) {
 		jsonRes, _ := json.Marshal(res)
 		Response(rw, req, nil, http.StatusOK, jsonRes)
 		return
+	}
+
+	if inn != "" {
+		if supplierId == 0 {
+			res["ErrorSupplier"] = fmt.Sprintf(`Поставщика с ИНН %s не существует в системе`, inn)
+			jsonRes, _ := json.Marshal(res)
+			Response(rw, req, nil, http.StatusOK, jsonRes)
+			return
+		}
+
+		if user.Organization.Int64 != supplierId {
+			res["ErrorLogin"] = fmt.Sprintf(`Логин "%s" не относится к данному поставщику`, login)
+			jsonRes, _ := json.Marshal(res)
+			Response(rw, req, nil, http.StatusOK, jsonRes)
+			return
+		}
 	}
 
 	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
