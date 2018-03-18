@@ -6,9 +6,9 @@
 	<server>
 		<port>:3000</port>
 		<maxLogSizeMB>1</maxLogSizeMB>
-		<maxLogDuration>24h</maxLogDuration>
+		<maxLogDuration>720h</maxLogDuration>
 		<logdir>D:\Курсач\project\raw_supply\serverlog</logdir>
 		<logname>log.txt</logname>
-		<rotationPeriod>2h</rotationPeriod>
+		<rotationPeriod>24h</rotationPeriod>
 	</server>
 </configuration>

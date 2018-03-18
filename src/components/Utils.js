@@ -31,7 +31,9 @@ export default class Utils {
     static validateFIO(fio, idInputInfo, idInput) {
         if (fio.length === 0) {
             Utils.errorInfo(idInputInfo, "Не введено имя", idInput);
+            return false;
         }
+        return true;
     }
 
     static validateLogin(login, idInputInfo, idInput) {

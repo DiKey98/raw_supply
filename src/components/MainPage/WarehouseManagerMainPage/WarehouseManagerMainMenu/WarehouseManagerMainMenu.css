@@ -1,0 +1,10 @@
+.font {
+    font-size: 25px !important;
+    font-weight: bold;
+    background: blanchedalmond !important;
+}
+
+.subMenuItem {
+    font-size: 20px !important;
+    font-weight: bold;
+}

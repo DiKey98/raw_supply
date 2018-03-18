@@ -48,6 +48,7 @@ export default class RegWarehouseManager extends Component {
         this.isValidLogin = Utils.validateLogin(this.state.login, 'loginInfo', 'inputLogin');
         this.isValidPassword = Utils.validatePassword(this.state.password, 'passwordInfo', 'inputPassword',
             this.state.repeatPassword, 'repeatPasswordInfo', 'repeatInputPassword');
+        alert(this.isValidFio + this.isValidLogin + this.isValidPassword);
         if (!this.isValidLogin || !this.isValidPassword || !this.isValidFio) {
             return;
         }

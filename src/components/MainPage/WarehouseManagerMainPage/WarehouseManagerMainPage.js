@@ -5,6 +5,8 @@ import Cookies from 'universal-cookie';
 import {Redirect} from 'react-router-dom';
 import Constants from '../../config';
 import Utils from '../../Utils';
+import {Link} from 'react-router-dom';
+import WarehouseManagerMainMenu from './WarehouseManagerMainMenu/WarehouseManagerMainMenu';
 
 let cookies = new Cookies();
 
@@ -16,9 +18,11 @@ export default class WarehouseManagerMainPage extends Component {
             )
         }
         return (
+
             <div>
-                Главная для менеджера склада
+                <WarehouseManagerMainMenu/>
             </div>
+
         )
     }
 }

@@ -23,8 +23,7 @@ export default class AdminPage extends Component {
                     role: Constants.adminRole,
                 },
                 success: function (dataFromServer) {
-                    if(dataFromServer["OK"] !== ""
-                        || dataFromServer["OK"] !== undefined) {
+                    if(dataFromServer["OK"]) {
                         cookies.remove(Constants.adminSession);
                     }
                 }

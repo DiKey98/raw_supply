@@ -30,11 +30,13 @@ func ConfirmWarehouseManager(rw http.ResponseWriter, req *http.Request) {
 		}
 	}
 
-	query = `
-	INSERT INTO "Users"( "FIO", "Login", "Password", "Is_Admin")
-	VALUES($1, $2, $3, $4)`
+	idRole := GetIdRoleByName(user.Role)
 
-	_, err = DB.Exec(query, user.FIO, user.Login, user.Password, false)
+	query = `
+	INSERT INTO "Users"( "FIO", "Login", "Password", "Is_Admin", "Role")
+	VALUES($1, $2, $3, $4, $5)`
+
+	_, err = DB.Exec(query, user.FIO, user.Login, user.Password, false, idRole)
 	if err != nil {
 		WriteToLog(err.Error())
 	}

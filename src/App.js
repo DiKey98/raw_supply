@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Route, Switch} from 'react-router';
 import Home from './components/Home/Home';
-import AddSupplier from './components/AddSupplier/AddSupplier';
+import AddSupplier from './components/MainPage/WarehouseManagerMainPage/AddSupplier/AddSupplier';
 import RegistrationMain from './components/Registration/RegistrationMain';
 import RegWarehouseManager from './components/Registration/RegWarehouseManager/RegWarehouseManager';
 import AdminPage from './components/Admin/AdminPage/AdminPage';
@@ -35,6 +35,9 @@ export default class App extends Component {
                     <Route exact={true} path='/login/warehouseManager/' component={LoginWarehouseManager}/>
 
                     <Route exact={true} path='/main/warehouseManager/' component={WarehouseManagerMainPage}/>
+                    <Route exact={true} path='/main/warehouseManager/suppliers/add/'
+                           component={AddSupplier}/>
+
                 </Switch>
             </div>
         );
