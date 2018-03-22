@@ -1,15 +1,16 @@
 .container {
-    width: 400px !important;
-    height: 100vh;
     text-align: center;
 }
 
-#regForm {
+#regWarehouseManagerForm {
     position: relative;
     top: 25%;
     color: black !important;
     font-weight: bold !important;
     font-size: 15px;
+    padding: 15px;
+    background: blanchedalmond !important;
+    border-radius: 10px;
 }
 
 #regButton {

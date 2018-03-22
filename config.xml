@@ -5,10 +5,23 @@
 	</dbconnect>
 	<server>
 		<port>:3000</port>
+		<rootDir>D:\Курсач\project\raw_supply\build</rootDir>
+	</server>
+	<log>
 		<maxLogSizeMB>1</maxLogSizeMB>
 		<maxLogDuration>720h</maxLogDuration>
 		<logdir>D:\Курсач\project\raw_supply\serverlog</logdir>
 		<logname>log.txt</logname>
 		<rotationPeriod>24h</rotationPeriod>
-	</server>
+	</log>
+	<!-- относительно корневого (rootDir) каталога сайта (см. <server>) -->
+	<upload> 
+		<uploadPassportDir>\upload\passport</uploadPassportDir>
+		<uploadCertificateDir>\upload\certificate</uploadCertificateDir>
+	</upload>
+	<testParams>
+		<rootDir>D:\Курсач\project\raw_supply\public</rootDir>
+		<uploadPassportDir>\upload\passport</uploadPassportDir>
+		<uploadCertificateDir>\upload\certificate</uploadCertificateDir>
+	</testParams>
 </configuration>

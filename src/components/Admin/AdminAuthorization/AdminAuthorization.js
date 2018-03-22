@@ -32,10 +32,7 @@ export default class AdminAuthorization extends Component {
         $('input').focusin(function () {
             $(this).select();
         }).click(function () {
-            $('.errorInfo').css({
-                    visibility: 'hidden'
-                }
-            );
+            $('.errorInfo').html("");
             $('input').css({
                 borderWidth: '0px',
             })
@@ -104,7 +101,7 @@ export default class AdminAuthorization extends Component {
             )
         }
         return (
-            <div className="container center-block">
+            <div className="container screen-height-container center-block">
 
                 <div id="inscriptionLoginAdmin">Вход на страницу администратора</div>
 

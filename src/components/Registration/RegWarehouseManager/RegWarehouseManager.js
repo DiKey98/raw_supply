@@ -32,10 +32,7 @@ export default class RegWarehouseManager extends Component {
         $('input').focusin(function () {
             $(this).select();
         }).click(function () {
-            $('.errorInfo').css({
-                    visibility: 'hidden'
-                }
-            );
+            $('.errorInfo').html("");
             $('input').css({
                 borderWidth: '0px',
             })
@@ -48,7 +45,7 @@ export default class RegWarehouseManager extends Component {
         this.isValidLogin = Utils.validateLogin(this.state.login, 'loginInfo', 'inputLogin');
         this.isValidPassword = Utils.validatePassword(this.state.password, 'passwordInfo', 'inputPassword',
             this.state.repeatPassword, 'repeatPasswordInfo', 'repeatInputPassword');
-        alert(this.isValidFio + this.isValidLogin + this.isValidPassword);
+
         if (!this.isValidLogin || !this.isValidPassword || !this.isValidFio) {
             return;
         }
@@ -103,11 +100,11 @@ export default class RegWarehouseManager extends Component {
             return <Redirect to='/regInfoPage/'/>;
         }
         return (
-            <div className="container center-block">
+            <div className="container screen-height-container center-block">
 
                 <div id="inscriptionRegManager">Регистрация менеджера склада</div>
 
-                <form id='regForm' onSubmit={this.handleSubmit}>
+                <form id='regWarehouseManagerForm' onSubmit={this.handleSubmit}>
 
                     <div className="form-group">
                         <label htmlFor="inputFIO">

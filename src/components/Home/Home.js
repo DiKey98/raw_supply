@@ -6,7 +6,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 export default class Home extends Component {
     render() {
         return (
-            <div className="container">
+            <div className="container screen-height-container">
                 <div className="btn-group-vertical center-block roles" role="group" aria-label="...">
                     <div id="inscription">Вход</div>
                     <Link role="button" className="btn btn-primary btn-block role" to='/login/warehouseManager/'>

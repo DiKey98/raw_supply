@@ -19,3 +19,5 @@ node_modules/
 serverlog/
 src/картинки/
 server/config.xml
+upload/certificate/test_certificate.jpg
+upload/

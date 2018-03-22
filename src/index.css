@@ -3,7 +3,7 @@ body {
   padding: 0;
   user-select: none;
   font-family: "Century Gothic", sans-serif !important;
-  background: url("./картинки/home.jpg") !important;
+  background: url("./картинки/home_2.jpg") !important;
     background-size: cover  !important;
 }
 
@@ -15,4 +15,9 @@ a {
 a:hover {
     text-decoration: none !important;
     color: blue !important;
+}
+
+.screen-height-container {
+    height: 100vh;
+    width: 400px !important;
 }

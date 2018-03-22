@@ -30,10 +30,7 @@ export default class LoginWarehouseManager extends Component {
         $('input').focusin(function () {
             $(this).select();
         }).click(function () {
-            $('.errorInfo').css({
-                    visibility: 'hidden'
-                }
-            );
+            $('.errorInfo').html("");
             $('input').css({
                 borderWidth: '0px',
             })
@@ -104,7 +101,7 @@ export default class LoginWarehouseManager extends Component {
 
                 <div id="inscriptionRegManager">Вход для менеджера склада</div>
 
-                <form id='regForm' onSubmit={this.handleSubmit}>
+                <form id='regWarehouseManagerForm' onSubmit={this.handleSubmit}>
 
                     <div className="form-group">
                         <label htmlFor="inputLogin">

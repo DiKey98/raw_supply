@@ -1,0 +1,31 @@
+.tableHeaders {
+    font-size: 20px !important;
+    font-weight: bold !important;
+}
+
+#dataTable {
+    display: inline-block !important;
+    border: 5px solid black;
+    margin: 20px;
+    background: blanchedalmond !important;
+}
+
+td {
+    border-top: 3px solid black;
+    cursor: pointer;
+    padding: 20px;
+    font-size: 20px !important;
+    font-weight: bold !important;
+    text-align: center;
+}
+
+th {
+    cursor: pointer;
+    padding: 10px;
+    text-align: center;
+}
+
+.searchField {
+    margin-top: -5px;
+    display: inline-block;
+}

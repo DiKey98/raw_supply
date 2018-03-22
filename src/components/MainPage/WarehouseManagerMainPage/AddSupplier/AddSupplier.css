@@ -4,4 +4,12 @@
     color: black !important;
     font-weight: bold !important;
     font-size: 15px;
+    padding: 15px;
+    background: blanchedalmond !important;
+    border-radius: 10px;
+}
+
+#addSupplierButton {
+    font-weight: bold !important;
+    font-size: 15px;
 }

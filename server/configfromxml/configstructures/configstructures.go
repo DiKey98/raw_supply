@@ -8,9 +8,12 @@ import (
 
 type Configuration struct {
 	//корневой элемент файла конфигурации
-	XMLName   xml.Name `xml:"configuration"`
-	DBConnect DBConnect
-	Server    Server
+	XMLName    xml.Name `xml:"configuration"`
+	DBConnect  DBConnect
+	Server     Server
+	Log        Log
+	Upload     Upload
+	TestParams TestParams
 }
 
 type DBConnect struct {
@@ -21,13 +24,31 @@ type DBConnect struct {
 
 type Server struct {
 	//параметры сервера
-	XMLName        xml.Name `xml:"server"`
-	Port           string   `xml:"port"`
+	XMLName xml.Name `xml:"server"`
+	Port    string   `xml:"port"`
+	RootDir string   `xml:"rootDir"`
+}
+
+type Log struct {
+	XMLName        xml.Name `xml:"log"`
 	MaxLogSizeMB   Float64  `xml:"maxLogSizeMB"`
 	MaxLogDuration Duration `xml:"maxLogDuration"`
 	LogDir         string   `xml:"logdir"`
 	LogName        string   `xml:"logname"`
 	RotationPeriod Duration `xml:"rotationPeriod"`
+}
+
+type Upload struct {
+	XMLName              xml.Name `xml:"upload"`
+	UploadPassportDir    string   `xml:"uploadPassportDir"`
+	UploadCertificateDir string   `xml:"uploadCertificateDir"`
+}
+
+type TestParams struct {
+	XMLName              xml.Name `xml:"testParams"`
+	UploadPassportDir    string   `xml:"uploadPassportDir"`
+	UploadCertificateDir string   `xml:"uploadCertificateDir"`
+	RootDir              string   `xml:"rootDir"`
 }
 
 var yesNo = map[string]bool{

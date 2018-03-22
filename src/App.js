@@ -11,6 +11,7 @@ import LoginWarehouseManager from './components/Login/LoginWarehouseManager/Logi
 import UnverifiedUsers from './components/Admin/UnverifiedUsers/UnverifiedUsers';
 import AddAdmin from "./components/Admin/AddAdmin/AddAdmin";
 import WarehouseManagerMainPage from './components/MainPage/WarehouseManagerMainPage/WarehouseManagerMainPage';
+import RawIncoming from './components/MainPage/WarehouseManagerMainPage/Raw/RawIncoming/RawIncoming';
 
 export default class App extends Component {
     render() {
@@ -37,6 +38,8 @@ export default class App extends Component {
                     <Route exact={true} path='/main/warehouseManager/' component={WarehouseManagerMainPage}/>
                     <Route exact={true} path='/main/warehouseManager/suppliers/add/'
                            component={AddSupplier}/>
+                    <Route exact={true} path='/main/warehouseManager/raw/incoming/'
+                           component={RawIncoming}/>
 
                 </Switch>
             </div>

@@ -18,7 +18,9 @@ import (
 	. "./httphandlers/warehousemanager/unverifiedwarehousemangers/delete"
 	//. "./httphandlers/warehousemanager/loginwarehousemanager"
 	. "./httphandlers/admin/addadmin"
+	. "./httphandlers/addsupplier"
 	"time"
+	. "./utils"
 )
 
 var cfgFile = "config.xml"
@@ -29,12 +31,14 @@ func main() {
 
 	Config, err = GetConfigFromFile(cfgFile)
 	if err != nil {
+		Logger.Errorf("%s \r\n", err.Error())
+		Logger.Flush()
 		panic(err)
 	}
 
-	ticker := time.NewTicker(Config.Server.RotationPeriod.Duration)
+	ticker := time.NewTicker(Config.Log.RotationPeriod.Duration)
 
-	logOptions, err = GetLogger(Config.Server.LogDir, Config.Server.LogName, 0755)
+	logOptions, err = GetLogger(Config.Log.LogDir, Config.Log.LogName, 0755)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -45,7 +49,7 @@ func main() {
 			select {
 			case <- ticker.C:
 				{
-					err = Rotation(logOptions, Config.Server.MaxLogSizeMB.Value, Config.Server.MaxLogDuration.Duration)
+					err = Rotation(logOptions, Config.Log.MaxLogSizeMB.Value, Config.Log.MaxLogDuration.Duration)
 					if err != nil {
 						Logger.Errorf("%s \r\n", err.Error())
 						Logger.Flush()
@@ -54,6 +58,20 @@ func main() {
 			}
 		}
 	}()
+
+	err = MakeUploadDirs()
+	if err != nil {
+		Logger.Errorf("%s \r\n", err.Error())
+		Logger.Flush()
+		panic(err)
+	}
+
+	err = MakeTestUploadDirs()
+	if err != nil {
+		Logger.Errorf("%s \r\n", err.Error())
+		Logger.Flush()
+		panic(err)
+	}
 
 	DB, err = ConnectToDataBase(Config.DBConnect.ConnectionString)
 	if err != nil {
@@ -68,6 +86,7 @@ func main() {
 	http.HandleFunc("/deleteWarehouseManager/", DeleteUnverifiedWarehouseManager)
 	http.HandleFunc("/loginWarehouseManager/", Login)
 	http.HandleFunc("/logoutWarehouseManager/", Logout)
+	http.HandleFunc("/addSupplier/", AddSupplier)
 
 	http.HandleFunc("/loginAdmin/", Login)
 	http.HandleFunc("/logoutAdmin/", Logout)

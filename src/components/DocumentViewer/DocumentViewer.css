@@ -1,0 +1,50 @@
+#overlay {
+    background: rgba(0, 0, 0, 0.4);
+    display: inline-block;
+    overflow: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 100
+}
+
+#arrow-left {
+    position: fixed;
+    border-top: 30px solid transparent;
+    border-right: 60px solid green;
+    border-bottom:30px solid transparent;
+    width: 0;
+    height: 0;
+    background: rgba(0, 0, 0, 0);
+    bottom: 50%;
+    left: 0;
+}
+
+#arrow-right {
+    position: fixed;
+    background: rgba(0, 0, 0, 0);
+    border-top: 30px solid transparent;
+    border-left: 60px solid green;
+    border-bottom: 30px solid transparent;
+    width: 0;
+    height: 0;
+    bottom: 50%;
+    right: 0;
+}
+
+.documentIMG {
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: 3% auto 3% auto;
+    position: absolute;
+    width: 100px;
+    height: 100px;
+}
+
+button:active, button:focus {
+    outline: none;
+}

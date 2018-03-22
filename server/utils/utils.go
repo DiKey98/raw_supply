@@ -7,6 +7,8 @@ import (
 	"fmt"
 	. "../logger/loggercreator"
 	. "../connect"
+	. "../configfromxml/configcreator"
+	"os"
 )
 
 type User struct {
@@ -138,4 +140,47 @@ func IsAuthorized(id int, role int) (bool) {
 	defer rows.Close()
 
 	return rows.Next()
+}
+
+func IsConsistsINN(inn string) (bool) {
+	query := `
+	SELECT "INN"
+	FROM "Suppliers"
+	WHERE "INN" = $1`
+
+	rows, err := DB.Query(query, inn)
+	if err != nil {
+		fmt.Println(err)
+		WriteToLog(err.Error())
+		return false
+	}
+	defer rows.Close()
+
+	return rows.Next()
+}
+
+func MakeUploadDirs() (error) {
+	err := os.MkdirAll(Config.Server.RootDir + Config.Upload.UploadPassportDir, 0755)
+	if err != nil {
+		return err
+	}
+
+	err = os.MkdirAll(Config.Server.RootDir + Config.Upload.UploadCertificateDir, 0755)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func MakeTestUploadDirs() (error) {
+	err := os.MkdirAll(Config.TestParams.RootDir + Config.TestParams.UploadPassportDir, 0755)
+	if err != nil {
+		return err
+	}
+
+	err = os.MkdirAll(Config.TestParams.RootDir + Config.TestParams.UploadCertificateDir, 0755)
+	if err != nil {
+		return err
+	}
+	return nil
 }

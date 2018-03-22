@@ -2,6 +2,8 @@
     font-size: 25px !important;
     font-weight: bold;
     background: blanchedalmond !important;
+    position: fixed;
+    z-index: 1;
 }
 
 .subMenuItem {

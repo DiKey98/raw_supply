@@ -32,10 +32,7 @@ export default class AddAdmin extends Component {
         $('input').focusin(function () {
             $(this).select();
         }).click(function () {
-            $('.errorInfo').css({
-                    visibility: 'hidden'
-                }
-            );
+            $('.errorInfo').html("");
             $('input').css({
                 borderWidth: '0px',
             })
@@ -71,7 +68,7 @@ export default class AddAdmin extends Component {
                     $('#adminLoginForm').trigger('reset');
                     return;
                 }
-                //Utils.errorInfo('loginAdminInfo', dataFromServer['ErrorInfo'], 'inputAdminLogin');
+                Utils.errorInfo('loginAdminInfo', dataFromServer['ErrorInfo'], 'inputAdminLogin');
             }.bind(this)
         });
     }
@@ -104,7 +101,7 @@ export default class AddAdmin extends Component {
             <div>
                 <AdminMenu/>
 
-                <div className="container center-block">
+                <div className="container screen-height-container center-block">
 
                     <form id='adminLoginForm' onSubmit={this.handleSubmit}>
 
