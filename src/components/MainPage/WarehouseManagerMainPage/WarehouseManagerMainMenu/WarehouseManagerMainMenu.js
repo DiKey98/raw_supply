@@ -32,7 +32,7 @@ export default class WarehouseManagerMainMenu extends Component {
                                 <MenuItem className="subMenuItem" href='#main/warehouseManager/suppliers/add/'>
                                     Добавить поставщика
                                 </MenuItem>
-                                <MenuItem className="subMenuItem" href='/'>
+                                <MenuItem className="subMenuItem" href='#main/warehouseManager/suppliers/status/'>
                                     Статус поставщиков
                                 </MenuItem>
                             </NavDropdown>

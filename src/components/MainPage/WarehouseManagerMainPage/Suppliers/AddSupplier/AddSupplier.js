@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import $ from 'jquery';
-import Constants from '../../../config';
+import Constants from '../../../../config';
 import { Redirect } from 'react-router';
-import Utils from '../../../Utils';
+import Utils from '../../../../Utils';
 import './AddSupplier.css'
-import WarehouseManagerMainMenu from "../WarehouseManagerMainMenu/WarehouseManagerMainMenu";
+import WarehouseManagerMainMenu from "../../WarehouseManagerMainMenu/WarehouseManagerMainMenu";
 import Cookies from 'universal-cookie';
 
 let cookies = new Cookies();

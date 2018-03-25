@@ -12,6 +12,7 @@
 
 td {
     border-top: 3px solid black;
+    border-right: 3px solid black;
     cursor: pointer;
     padding: 20px;
     font-size: 20px !important;
@@ -20,6 +21,7 @@ td {
 }
 
 th {
+    border-right: 3px solid black;
     cursor: pointer;
     padding: 10px;
     text-align: center;

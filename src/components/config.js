@@ -8,8 +8,6 @@ module.exports = {
     loginRegexp: /[A-Za-z]\w{3,9}/,
     passRegexp: /\w*/,
 
-    pathToUploadDir: "..",
-
     adminRole: "Admin",
     adminSession: "adminSession",
     warehouseManagerRole: "Менеджер склада",

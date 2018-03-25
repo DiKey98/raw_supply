@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Route, Switch} from 'react-router';
 import Home from './components/Home/Home';
-import AddSupplier from './components/MainPage/WarehouseManagerMainPage/AddSupplier/AddSupplier';
+import AddSupplier from './components/MainPage/WarehouseManagerMainPage/Suppliers/AddSupplier/AddSupplier';
 import RegistrationMain from './components/Registration/RegistrationMain';
 import RegWarehouseManager from './components/Registration/RegWarehouseManager/RegWarehouseManager';
 import AdminPage from './components/Admin/AdminPage/AdminPage';
@@ -12,6 +12,7 @@ import UnverifiedUsers from './components/Admin/UnverifiedUsers/UnverifiedUsers'
 import AddAdmin from "./components/Admin/AddAdmin/AddAdmin";
 import WarehouseManagerMainPage from './components/MainPage/WarehouseManagerMainPage/WarehouseManagerMainPage';
 import RawIncoming from './components/MainPage/WarehouseManagerMainPage/Raw/RawIncoming/RawIncoming';
+import SupplierStatus from'./components/MainPage/WarehouseManagerMainPage/Suppliers/SuppliersStatus/SuppliersStatus';
 
 export default class App extends Component {
     render() {
@@ -38,6 +39,8 @@ export default class App extends Component {
                     <Route exact={true} path='/main/warehouseManager/' component={WarehouseManagerMainPage}/>
                     <Route exact={true} path='/main/warehouseManager/suppliers/add/'
                            component={AddSupplier}/>
+                    <Route exact={true} path='/main/warehouseManager/suppliers/status/'
+                           component={SupplierStatus}/>
                     <Route exact={true} path='/main/warehouseManager/raw/incoming/'
                            component={RawIncoming}/>
 
