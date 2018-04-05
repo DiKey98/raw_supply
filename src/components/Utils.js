@@ -28,9 +28,20 @@ export default class Utils {
         });
     }
 
+    static isNullOrWhitespace(input) {
+        if (typeof input === 'undefined' || input === null) {
+            return true;
+        }
+        return input.replace(/\s/g, '').length < 1;
+    }
+
     static validateFIO(fio, idInputInfo, idInput) {
         if (fio.length === 0) {
             Utils.errorInfo(idInputInfo, "Не введено имя", idInput);
+            return false;
+        }
+        if (Utils.isNullOrWhitespace(fio)) {
+            Utils.errorInfo(idInputInfo, "Некорректное имя", idInput);
             return false;
         }
         return true;

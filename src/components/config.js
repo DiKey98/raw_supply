@@ -12,4 +12,38 @@ module.exports = {
     adminSession: "adminSession",
     warehouseManagerRole: "Менеджер склада",
     warehouseManagerSession: "warehouseManagerSession",
+
+    datePickerLocale: {
+        "format": "DD.MM.YYYY",
+        "separator": " - ",
+        "applyLabel": "Подтвердить",
+        "cancelLabel": "Выйти",
+        "fromLabel": "From",
+        "toLabel": "To",
+        "customRangeLabel": "Custom",
+        "daysOfWeek": [
+            "Пн",
+            "Вт",
+            "Ср",
+            "Чт",
+            "Пт",
+            "Сб",
+            "Вс",
+        ],
+        "monthNames": [
+            "Январь",
+            "Февраль",
+            "Март",
+            "Апрель",
+            "Май",
+            "Июнь",
+            "Июль",
+            "Август",
+            "Сентябрь",
+            "Октябрь",
+            "Ноябрь",
+            "Декабрь"
+        ],
+        "firstDay": 0
+    },
 };

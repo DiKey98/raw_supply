@@ -60,12 +60,20 @@ export default class AddSupplier extends Component {
         if (this.state.org.length === 0) {
             Utils.errorInfo('orgInfo', "Не введено название организации", 'inputOrg');
             this.isValidOrg = false;
+        }
+        else if (Utils.isNullOrWhitespace(this.state.org)) {
+            Utils.errorInfo('orgInfo', "Некорректное название организации", 'inputOrg');
+            this.isValidOrg = false;
         } else {
             this.isValidOrg = true;
         }
 
         if (this.state.phone.length === 0) {
             Utils.errorInfo('phoneInfo', "Не введен контактный телефон", 'inputPhone');
+            this.isValidPhone = false;
+        }
+        else if (Utils.isNullOrWhitespace(this.state.phone)) {
+            Utils.errorInfo('phoneInfo', "Некорректный контактный телефон", 'inputPhone');
             this.isValidPhone = false;
         } else {
             this.isValidPhone = true;
@@ -74,12 +82,20 @@ export default class AddSupplier extends Component {
         if (this.state.legalAddress.length === 0) {
             Utils.errorInfo('legalAddressInfo', "Не введен юридический адрес", 'inputLegalAddress');
             this.isValidLegalAddress = false;
+        }
+        else if (Utils.isNullOrWhitespace(this.state.legalAddress)) {
+            Utils.errorInfo('legalAddressInfo', "Некорректный юридический адрес", 'inputLegalAddress');
+            this.isValidLegalAddress = false;
         } else {
             this.isValidLegalAddress = true;
         }
 
         if (this.state.mailingAddress.length === 0) {
             Utils.errorInfo('mailingAddressInfo', "Не введен почтовый адрес", 'inputMailingAddress');
+            this.isValidMailingAddress = false;
+        }
+        else if (Utils.isNullOrWhitespace(this.state.mailingAddress)) {
+            Utils.errorInfo('mailingAddressInfo', "Некорректный почтовый адрес", 'inputMailingAddress');
             this.isValidMailingAddress = false;
         } else {
             this.isValidMailingAddress = true;
@@ -88,12 +104,20 @@ export default class AddSupplier extends Component {
         if (this.state.inn.length === 0) {
             Utils.errorInfo('innInfo', "Не введен ИНН", 'inputINN');
             this.isValidINN = false;
+        }
+        else if (Utils.isNullOrWhitespace(this.state.org)) {
+            Utils.errorInfo('innInfo', "Некорректный ИНН", 'inputINN');
+            this.isValidINN = false;
         } else {
             this.isValidINN = true;
         }
 
         if (this.state.bankDetails.length === 0) {
             Utils.errorInfo('bankDetailsInfo', "Не введены банковские реквизиты", 'inputBankDetails');
+            this.isValidBankDetails = false;
+        }
+        else if (Utils.isNullOrWhitespace(this.state.bankDetails)) {
+            Utils.errorInfo('bankDetailsInfo', "Некорректные банковские реквизиты", 'inputBankDetails');
             this.isValidBankDetails = false;
         } else {
             this.isValidBankDetails = true;
@@ -102,12 +126,20 @@ export default class AddSupplier extends Component {
         if (this.state.generalManager.length === 0) {
             Utils.errorInfo('generalManagerInfo', "Не введено ФИО ген. директора", 'inputGeneralManager');
             this.isValidGeneralManager = false;
+        }
+        else if (Utils.isNullOrWhitespace(this.state.generalManager)) {
+            Utils.errorInfo('generalManagerInfo', "Некорректное ФИО ген. директора", 'inputGeneralManager');
+            this.isValidGeneralManager = false;
         } else {
             this.isValidGeneralManager = true;
         }
 
         if (this.state.generalAccountant.length === 0) {
             Utils.errorInfo('generalAccountantInfo', "Не введено ФИО гл. бухгалтера", 'inputGeneralAccountant');
+            this.isValidGeneralAccountant = false;
+        }
+        else if (Utils.isNullOrWhitespace(this.state.generalAccountant)) {
+            Utils.errorInfo('generalAccountantInfo', "Некорректное ФИО гл. бухгалтера", 'inputGeneralAccountant');
             this.isValidGeneralAccountant = false;
         } else {
             this.isValidGeneralAccountant = true;

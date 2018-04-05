@@ -5,7 +5,6 @@ import (
 	. "../../connect"
 	. "../../utils"
 	"encoding/json"
-	"fmt"
 )
 
 func GetUnverifiedUsers(rw http.ResponseWriter, req *http.Request) {
@@ -24,12 +23,10 @@ func GetUnverifiedUsers(rw http.ResponseWriter, req *http.Request) {
 	}
 	defer rows.Close()
 
-
 	for rows.Next() {
 		user := UnverifiedUser{0, "", "", "", ""}
 		err = rows.Scan(&user.ID, &user.FIO, &user.Login, &user.Role)
 		if err != nil {
-			fmt.Println(err)
 			res, _ := json.Marshal([]UnverifiedUser{})
 			Response(rw, req, nil, http.StatusOK, res)
 			return

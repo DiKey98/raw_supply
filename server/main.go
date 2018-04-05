@@ -19,6 +19,10 @@ import (
 	//. "./httphandlers/warehousemanager/loginwarehousemanager"
 	. "./httphandlers/admin/addadmin"
 	. "./httphandlers/addsupplier"
+	. "./httphandlers/addincoming"
+	. "./httphandlers/getnomenclature"
+	. "./httphandlers/getsuppliers"
+	. "./httphandlers/getincoming"
 	"time"
 	. "./utils"
 )
@@ -93,6 +97,11 @@ func main() {
 	http.HandleFunc("/addAdmin/", AddAdmin)
 
 	http.HandleFunc("/getUnverifiedUsers/", GetUnverifiedUsers)
+	http.HandleFunc("/getNomenclature/", GetNomenclature)
+	http.HandleFunc("/getSuppliers/", GetSuppliers)
+	http.HandleFunc("/getIncoming/", GetIncoming)
+
+	http.HandleFunc("/addIncoming/", AddIncoming)
 
 	http.ListenAndServe(Config.Server.Port, context.ClearHandler(http.DefaultServeMux))
 }

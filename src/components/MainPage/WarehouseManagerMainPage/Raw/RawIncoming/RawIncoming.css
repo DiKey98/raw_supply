@@ -1,3 +1,47 @@
 .tab {
     margin-top: 5%;
 }
+
+.incomingOption {
+    padding-right: 30px;
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+}
+
+.incomingOption:hover {
+    color: blue;
+}
+
+#selectIncoming {
+    padding-left: 5%;
+    padding-bottom: 4%;
+}
+
+#selectPeriod {
+    font-size: 15px;
+    font-weight: bold;
+}
+
+#period {
+    top: 20%;
+    position: absolute;
+    display: inline-block;
+    margin-left: 5%;
+    color: white;
+    font-size: 25px;
+    font-weight: bold;
+}
+
+#addIncoming {
+    top: 20%;
+    position: absolute;
+    width: 150px;
+    font-size: 20px;
+    font-weight: bold;
+    margin-left: 86%;
+}
+
+#addIncoming:hover {
+    color: blue;
+}

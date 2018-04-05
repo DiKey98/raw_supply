@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
+import ReactDOM from 'react-dom';
 import './DocumentViewer.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import $ from 'jquery';
 
-let img = new Image();
-
 export default class DocumentViewer extends Component {
+    currentSrc = null;
     constructor(props) {
         super(props);
         this.state = {
@@ -14,36 +14,48 @@ export default class DocumentViewer extends Component {
             isCurrentPassport: true,
         };
 
-        img.src = props.pathToPassport;
+        this.currentSrc = props.pathToPassport;
 
         this.removeView = this.removeView.bind(this);
         this.nextDocument = this.nextDocument.bind(this);
     }
 
     componentDidMount() {
-        img.onload = function() {
-            $('#docIMG').css({
-                'width': this.width + 'px',
-                'height': this.height + 'px',
-                background: 'url(' + this.src + ')',
-            });
-        };
+        ReactDOM.render(
+            <object>
+                <embed
+                    id="pdfViewer"
+                    src={this.currentSrc}
+                     />
+            </object>,
+            document.getElementById('docIMG'));
     }
 
     nextDocument(event) {
         event.stopPropagation();
 
         if (this.state.isCurrentPassport) {
-            img.src = this.state.pathToCertificate;
+            this.currentSrc = this.state.pathToCertificate;
             this.setState({
                 isCurrentPassport: false,
             });
         } else {
-            img.src = this.state.pathToPassport;
+            this.currentSrc = this.state.pathToPassport;
             this.setState({
                 isCurrentPassport: true,
             });
         }
+
+        ReactDOM.unmountComponentAtNode(document.getElementById('docIMG'));
+
+        ReactDOM.render(
+            <object>
+                <embed
+                    id="pdfViewer"
+                    src={this.currentSrc}
+                />
+            </object>,
+            document.getElementById('docIMG'));
     }
 
     removeView() {

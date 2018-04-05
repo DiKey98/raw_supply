@@ -6,7 +6,7 @@ import ReactDOM from 'react-dom';
 import { NavDropdown, MenuItem } from 'react-bootstrap';
 
 let statuses = ["Надежный", "Ненадежный", "Нет статуса"];
-let statusColors = ["springgreen", "red", "blue"];
+let statusColors = ["springgreen", "red", "black"];
 
 export default class Table extends Component {
     constructor(props) {
@@ -133,6 +133,7 @@ export default class Table extends Component {
                                 {row.map(function (cell, idx_column) {
                                     return (
                                         <td data-idx={idx_row*row.length+idx_column}
+                                            data-row={idx_row}
                                             onClick={this.props.tdClick}
                                             id={`dataCell${idx_row*row.length+idx_column}`}
                                             className="dataCell" key={idx_column}>
