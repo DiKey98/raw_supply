@@ -8,6 +8,8 @@ import { NavDropdown, MenuItem } from 'react-bootstrap';
 let statuses = ["Надежный", "Ненадежный", "Нет статуса"];
 let statusColors = ["springgreen", "red", "black"];
 
+let data = [];
+
 export default class Table extends Component {
     constructor(props) {
         super(props);
@@ -19,6 +21,7 @@ export default class Table extends Component {
             preSearchData: props.data,
 
         };
+        data = this.state.data;
         this.sort = this.sort.bind(this);
         this.search = this.search.bind(this);
         this.focusSearchField = this.focusSearchField.bind(this);
@@ -36,6 +39,12 @@ export default class Table extends Component {
         this.setState({
             data: this.state.preSearchData,
         });
+    }
+
+    componentDidMount() {
+        if (this.props.replaceStatus) {
+            this.replaceStatus();
+        }
     }
 
     componentDidUpdate() {
@@ -155,6 +164,7 @@ export default class Table extends Component {
         for (let i = 0; i < this.state.data.length; i++) {
             let idx = (i+1)*this.state.headers.length - 1;
             let oldHtml = this.state.data[i][this.state.data[i].length-1];
+
             ReactDOM.render(<MenuItems statuses={statuses}
                                        index={i}
                                        oldHtml={oldHtml}
@@ -178,6 +188,7 @@ export default class Table extends Component {
 class MenuItems extends Component {
     constructor(props) {
         super(props);
+        this.handleSelect = this.handleSelect.bind(this);
     }
 
     componentDidMount() {
@@ -189,13 +200,33 @@ class MenuItems extends Component {
         });
     }
 
+    handleSelect(value, index) {
+        $.ajax({
+            url: '/changeSupplierStatus/',
+            method: "POST",
+            dataType: "JSON",
+            data: {
+                supplier: data[index][1],
+                status: value,
+            },
+            success: function (dataFromServer) {
+                if(dataFromServer['ErrorInfo'] === undefined || dataFromServer['ErrorInfo'].length === 0) {
+                    alert("Статус постащика изменен");
+                    return;
+                }
+                alert("Невозможно изменить статус поставщика");
+            }
+        })
+    }
+
     render() {
         const listItems = this.props.statuses.map((value, index) =>
             <MenuItem key={index}
                       id={`menuItem${this.props.index*this.props.statuses.length + index}`}
                       onClick={this.props.onClick}
                       data-idx={index}
-                      data-dropidx={this.props.index}>
+                      data-dropidx={this.props.index}
+                      onSelect={this.handleSelect.bind(this, value, this.props.index)}>
                 {value}
             </MenuItem>
         );
@@ -203,7 +234,8 @@ class MenuItems extends Component {
             <NavDropdown id={`dropdown${this.props.index}`}
                          className="dropdowns"
                          data-idx={this.props.index}
-                         title={this.props.oldHtml}>
+                         title={this.props.oldHtml}
+                         >
                 {listItems}
             </NavDropdown>
         )

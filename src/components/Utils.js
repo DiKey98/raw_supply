@@ -100,4 +100,19 @@ export default class Utils {
         }
         return true;
     }
+
+    static getSuppliers(isAsync = true) {
+        $.ajax ({
+            url: "/getSuppliers/",
+            method: "POST",
+            dataType: 'json',
+            async: isAsync,
+            success: function (dataFromServer) {
+                if (dataFromServer["ErrorInfo"] !== undefined) {
+                    return;
+                }
+                $(document).trigger('loadData', [dataFromServer]);
+            }
+        });
+    }
 }

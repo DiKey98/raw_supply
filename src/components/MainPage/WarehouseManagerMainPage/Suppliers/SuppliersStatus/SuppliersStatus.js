@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import ReactDOM from 'react-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Constants from '../../../../config';
 import { Redirect } from 'react-router';
@@ -6,6 +7,8 @@ import './SuppliersStatus.css'
 import WarehouseManagerMainMenu from "../../WarehouseManagerMainMenu/WarehouseManagerMainMenu";
 import Cookies from 'universal-cookie';
 import Table from '../../../../Table/Table';
+import Utils from '../../../../Utils';
+import $ from 'jquery';
 
 let cookies = new Cookies();
 
@@ -23,36 +26,71 @@ export default class SuppliersStatus extends Component {
         this.state = {
             statuses: null,
             oldHtml: null,
+            suppliers: [],
         };
 
         this.showStatuses = this.showStatuses.bind(this);
-
+        this.suppliersToArray = this.suppliersToArray.bind(this);
     }
 
     componentDidMount() {
-        this.setState({
-            statuses: statuses,
-        });
+        Utils.getSuppliers();
+        $(document).bind('loadData', function(event, data) {
+            this.setState({
+                suppliers: this.suppliersToArray(data),
+                statuses: statuses,
+            });
+            ReactDOM.render(
+                <Table className="text-center"
+                       headers={headers}
+                       data={this.state.suppliers}
+                       tdClick={this.showStatuses}
+                       replaceStatus={true}
+                />,
+                document.getElementById('suppliersTable')
+            );
+        }.bind(this));
     }
 
     showStatuses(event) {
 
     }
 
+    suppliersToArray(objects) {
+        if (objects === null) {
+            return [];
+        }
+        let result = [];
+        for (let i = 0; i < objects.length; i++) {
+            let tmp = [];
+            tmp.push(objects[i]['Name']);
+            tmp.push(objects[i]['INN']);
+            tmp.push(objects[i]['Phone']);
+            tmp.push(objects[i]['LegalAddress']);
+            tmp.push(objects[i]['GeneralManager']);
+            tmp.push(objects[i]['GeneralAccountant']);
+            tmp.push(objects[i]['Status']['String']);
+
+            result.push(tmp);
+        }
+        return result;
+    }
+
     render() {
         if (cookies.get(Constants.warehouseManagerSession) === undefined) {
             return <Redirect to='/registration/warehouseManager/'/>;
         }
+
         return (
 
             <div>
                 <WarehouseManagerMainMenu/>
                 <br/>
 
-                <div className="container-fluid tab">
+                <div className="container-fluid tab" id="suppliersTable">
                     <Table className="text-center"
                            headers={headers}
-                           data={data}
+                           data={this.state.suppliers}
                            tdClick={this.showStatuses}
                            replaceStatus={true}
                     />

@@ -11,6 +11,7 @@ import {DateRangePicker} from 'react-bootstrap-daterangepicker';
 import 'bootstrap-daterangepicker/daterangepicker.css';
 import Constants from '../../../../config';
 import AddIncoming from '../AddIncoming/AddIncoming';
+import Utils from "../../../../Utils";
 
 let headers = ["Номенклатура", "Поставщик", "Количество", "Цена за ед.", "Общая стоимость",
     "Дата прибытия", "Время прибытия", "Дата прибытия по договору"];
@@ -36,7 +37,6 @@ export default class RawIncoming extends Component {
         this.showAddForm = this.showAddForm.bind(this);
 
         this.getNomenclature = this.getNomenclature.bind(this);
-        this.getSuppliers = this.getSuppliers.bind(this);
 
         this.nomenclatureToArray = this.nomenclatureToArray.bind(this);
         this.suppliersToArray = this.suppliersToArray.bind(this);
@@ -82,6 +82,9 @@ export default class RawIncoming extends Component {
     }
 
     nomenclatureToArray(objects) {
+        if (objects === null) {
+            return [];
+        }
         let result = [];
         for (let i = 0; i < objects.length; i++) {
             result.push(`${objects[i]['ID']} ${objects[i]['Name']}`);
@@ -90,6 +93,9 @@ export default class RawIncoming extends Component {
     }
 
     suppliersToArray(objects) {
+        if (objects === null) {
+            return [];
+        }
         let result = [];
         for (let i = 0; i < objects.length; i++) {
             result.push(`${objects[i]['INN']} ${objects[i]['Name']}`);
@@ -98,6 +104,9 @@ export default class RawIncoming extends Component {
     }
 
     incomingToArray(objects) {
+        if (objects === null) {
+            return [];
+        }
         let result = [];
         for (let i = 0; i < objects.length; i++) {
             let tmp =[];
@@ -119,7 +128,10 @@ export default class RawIncoming extends Component {
 
     componentDidMount() {
         this.getNomenclature();
-        this.getSuppliers();
+        Utils.getSuppliers();
+        $(document).bind('loadData', function(event, data) {
+            this.suppliers = this.suppliersToArray(data);
+        }.bind(this));
     }
 
     getNomenclature() {
@@ -132,20 +144,6 @@ export default class RawIncoming extends Component {
                     return;
                 }
                 this.nomenclature = this.nomenclatureToArray(dataFromServer);
-            }.bind(this)
-        });
-    }
-
-    getSuppliers() {
-        $.ajax ({
-            url: "/getSuppliers/",
-            method: "POST",
-            dataType: 'json',
-            success: function (dataFromServer) {
-                if (dataFromServer["ErrorInfo"] !== undefined) {
-                    return null;
-                }
-                this.suppliers = this.suppliersToArray(dataFromServer);
             }.bind(this)
         });
     }

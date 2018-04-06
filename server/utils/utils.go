@@ -40,6 +40,11 @@ type Nomenclature struct {
 type Supplier struct {
 	INN string
 	Name string
+	Phone string
+	LegalAddress string
+	GeneralManager string
+	GeneralAccountant string
+	Status sql.NullString
 }
 
 type Incoming struct {
@@ -175,6 +180,46 @@ func GetIdSupplierByINN(inn string) (int64) {
 		}
 	}
 	return result
+}
+
+func GetIdStatusByName(status string) (int64) {
+	query := `
+	SELECT "ID"
+	FROM "Statuses"
+	WHERE "Status" = $1`
+
+	rows, err := DB.Query(query, status)
+	if err != nil {
+		WriteToLog(err.Error())
+		return 0
+	}
+	defer rows.Close()
+
+	var result int64 = 0
+	for rows.Next() {
+		err = rows.Scan(&result)
+		if err != nil {
+			WriteToLog(err.Error())
+			return 0
+		}
+	}
+	return result
+}
+
+func IsExistsStatus(idSupplier int64) (bool) {
+	query := `
+	SELECT "ID_Supplier"
+	FROM "Supplier_Status"
+	WHERE "ID_Supplier" = $1`
+
+	rows, err := DB.Query(query, idSupplier)
+	if err != nil {
+		WriteToLog(err.Error())
+		return false
+	}
+	defer rows.Close()
+
+	return rows.Next()
 }
 
 func IsAuthorized(id int, role int) (bool) {
