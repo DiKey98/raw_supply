@@ -23,6 +23,7 @@ import (
 	. "./httphandlers/getnomenclature"
 	. "./httphandlers/getsuppliers"
 	. "./httphandlers/getincoming"
+	. "./httphandlers/changesupplierstatus"
 	"time"
 	. "./utils"
 )
@@ -102,6 +103,8 @@ func main() {
 	http.HandleFunc("/getIncoming/", GetIncoming)
 
 	http.HandleFunc("/addIncoming/", AddIncoming)
+
+	http.HandleFunc("/changeSupplierStatus/", ChangeSupplierStatus)
 
 	http.ListenAndServe(Config.Server.Port, context.ClearHandler(http.DefaultServeMux))
 }
