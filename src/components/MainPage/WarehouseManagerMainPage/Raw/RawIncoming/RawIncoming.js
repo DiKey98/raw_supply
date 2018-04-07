@@ -27,6 +27,7 @@ export default class RawIncoming extends Component {
     incoming = [];
     certificates = [];
     passports = [];
+
     constructor(props) {
         super(props);
         this.showDocuments = this.showDocuments.bind(this);
@@ -41,8 +42,6 @@ export default class RawIncoming extends Component {
         this.nomenclatureToArray = this.nomenclatureToArray.bind(this);
         this.suppliersToArray = this.suppliersToArray.bind(this);
         this.incomingToArray = this.incomingToArray.bind(this);
-
-        this.getIncoming();
     }
 
     showAddForm() {
@@ -58,27 +57,63 @@ export default class RawIncoming extends Component {
     applyDate(event, picker) {
         let text = `c ${picker.startDate.format('DD.MM.YYYY')} по ${picker.endDate.format('DD.MM.YYYY')}`;
         $('#period').text(text);
+
+        Utils.getIncoming(false, picker.startDate.format('DD.MM.YYYY'), picker.endDate.format('DD.MM.YYYY'));
+        $(document).bind('loadIncoming', function(event, data) {
+            this.incoming = this.incomingToArray(data);
+            ReactDOM.unmountComponentAtNode(document.getElementById('incomingTable'));
+            ReactDOM.render(
+                <Table className="text-center"
+                       headers={headers}
+                       data={this.incoming}
+                       tdClick={this.showDocuments}
+                />,
+                document.getElementById('incomingTable')
+            );
+        }.bind(this));
     }
 
     selectPeriod() {
         $('#period').text("");
-        $('#selectPeriod').show()
+        $('#selectPeriod').show();
     }
 
     selectCurrentDay() {
         $('#selectPeriod').hide();
         $('#period').text("сегодня");
+
+        Utils.getIncoming();
+        $(document).bind('loadIncoming', function(event, data) {
+            this.incoming = this.incomingToArray(data);
+            ReactDOM.unmountComponentAtNode(document.getElementById('incomingTable'));
+            ReactDOM.render(
+                <Table className="text-center"
+                       headers={headers}
+                       data={this.incoming}
+                       tdClick={this.showDocuments}
+                />,
+                document.getElementById('incomingTable')
+            );
+        }.bind(this));
     }
 
     selectCurrentMonth() {
         $('#selectPeriod').hide();
         $('#period').text("текущий месяц");
-    }
 
-    componentDidMount() {
-        $('#selectPeriod').hide();
-        $('#period').text("сегодня");
-        $('#currentDay').attr("checked", "true");
+        Utils.getIncoming(true);
+        $(document).bind('loadIncoming', function(event, data) {
+            this.incoming = this.incomingToArray(data);
+            ReactDOM.unmountComponentAtNode(document.getElementById('incomingTable'));
+            ReactDOM.render(
+                <Table className="text-center"
+                       headers={headers}
+                       data={this.incoming}
+                       tdClick={this.showDocuments}
+                />,
+                document.getElementById('incomingTable')
+            );
+        }.bind(this));
     }
 
     nomenclatureToArray(objects) {
@@ -127,10 +162,28 @@ export default class RawIncoming extends Component {
     }
 
     componentDidMount() {
+        $('#selectPeriod').hide();
+        $('#period').text("сегодня");
+        $('#currentDay').attr("checked", "true");
+
         this.getNomenclature();
+
         Utils.getSuppliers();
-        $(document).bind('loadData', function(event, data) {
+        $(document).bind('loadSuppliers', function(event, data) {
             this.suppliers = this.suppliersToArray(data);
+        }.bind(this));
+
+        Utils.getIncoming();
+        $(document).bind('loadIncoming', function(event, data) {
+            this.incoming = this.incomingToArray(data);
+            ReactDOM.render(
+                <Table className="text-center"
+                       headers={headers}
+                       data={this.incoming}
+                       tdClick={this.showDocuments}
+                />,
+                document.getElementById('incomingTable')
+            );
         }.bind(this));
     }
 
@@ -144,21 +197,6 @@ export default class RawIncoming extends Component {
                     return;
                 }
                 this.nomenclature = this.nomenclatureToArray(dataFromServer);
-            }.bind(this)
-        });
-    }
-
-    getIncoming() {
-        $.ajax ({
-            url: "/getIncoming/",
-            method: "POST",
-            dataType: 'json',
-            async: false,
-            success: function (dataFromServer) {
-                if (dataFromServer["ErrorInfo"] !== undefined) {
-                    return null;
-                }
-                this.incoming = this.incomingToArray(dataFromServer);
             }.bind(this)
         });
     }
@@ -213,11 +251,13 @@ export default class RawIncoming extends Component {
                         Добавить
                     </button>
 
+                    <div className="container-fluid tab" id="incomingTable">
                     <Table className="text-center"
                            headers={headers}
                            data={this.incoming}
                            tdClick={this.showDocuments}
                     />
+                    </div>
                 </div>
 
             </div>

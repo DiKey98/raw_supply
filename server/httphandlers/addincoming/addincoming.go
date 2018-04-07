@@ -52,7 +52,7 @@ func AddIncoming(rw http.ResponseWriter, req *http.Request) {
 
 	contractIncomingDate, err := time.Parse("02.01.2006", req.FormValue("contractIncomingDate"))
 	if err != nil {
-		res["ErrorСontractIncomingDate"] = "Некорректный формат даты"
+		res["ErrorContractIncomingDate"] = "Некорректный формат даты"
 		jsonRes, _ := json.Marshal(res)
 		Response(rw, req, nil, http.StatusOK, jsonRes)
 		WriteToLog(err.Error())

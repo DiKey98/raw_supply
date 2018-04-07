@@ -35,7 +35,7 @@ export default class SuppliersStatus extends Component {
 
     componentDidMount() {
         Utils.getSuppliers();
-        $(document).bind('loadData', function(event, data) {
+        $(document).bind('loadSuppliers', function(event, data) {
             this.setState({
                 suppliers: this.suppliersToArray(data),
                 statuses: statuses,

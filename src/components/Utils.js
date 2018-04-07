@@ -111,7 +111,29 @@ export default class Utils {
                 if (dataFromServer["ErrorInfo"] !== undefined) {
                     return;
                 }
-                $(document).trigger('loadData', [dataFromServer]);
+                $(document).trigger('loadSuppliers', [dataFromServer]);
+            }
+        });
+    }
+
+    static getIncoming(forCurrentMonth = false, start = "", end = "") {
+        let isPeriod = ((start !== "" || end !== "") && !forCurrentMonth);
+        $.ajax ({
+            url: "/getIncoming/",
+            method: "POST",
+            dataType: 'json',
+            data: {
+                forToday: !forCurrentMonth && !isPeriod,
+                forCurrentMonth: forCurrentMonth && !isPeriod,
+                start: start,
+                end: end,
+                isPeriod: isPeriod,
+            },
+            success: function (dataFromServer) {
+                if (dataFromServer["ErrorInfo"] !== undefined) {
+                    return;
+                }
+                $(document).trigger('loadIncoming', [dataFromServer]);
             }
         });
     }
