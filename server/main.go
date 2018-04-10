@@ -24,6 +24,7 @@ import (
 	. "./httphandlers/getsuppliers"
 	. "./httphandlers/getincoming"
 	. "./httphandlers/changesupplierstatus"
+	. "./httphandlers/updateincoming"
 	"time"
 	. "./utils"
 )
@@ -103,6 +104,7 @@ func main() {
 	http.HandleFunc("/getIncoming/", GetIncoming)
 
 	http.HandleFunc("/addIncoming/", AddIncoming)
+	http.HandleFunc("/updateIncoming/", UpdateIncoming)
 
 	http.HandleFunc("/changeSupplierStatus/", ChangeSupplierStatus)
 

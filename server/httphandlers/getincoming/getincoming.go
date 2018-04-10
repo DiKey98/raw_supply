@@ -41,7 +41,8 @@ func GetIncoming(rw http.ResponseWriter, req *http.Request) {
 
 	baseQuery := `
 	SELECT "Nomenclature"."Name", "Suppliers"."Name", "Units_Count", "Unit_Cost",
-	"Actual_Arrival_Date", "Incoming_Time", "Contract_Arrival_Date", "Passport", "Certificate"
+	"Actual_Arrival_Date", "Incoming_Time", "Contract_Arrival_Date", "Passport", "Certificate",
+	"Incoming"."ID", "Incoming"."Supplier"
 	FROM "Incoming"
 	LEFT JOIN "Nomenclature" ON "Incoming"."ID_Nomenclature" = "Nomenclature"."ID"
 	LEFT JOIN "Suppliers" ON "Incoming"."Supplier" = "Suppliers"."ID"
@@ -98,6 +99,8 @@ func GetIncoming(rw http.ResponseWriter, req *http.Request) {
 		ContractIncomingDate string
 		Passport string
 		Certificate string
+		ID int
+		IDSupplier int
 	}
 
 	result := make([]ReturnIncoming, 0)
@@ -105,11 +108,13 @@ func GetIncoming(rw http.ResponseWriter, req *http.Request) {
 	for rows.Next() {
 		incoming := Incoming{"", "", 0, 0,
 			time.Time{}, time.Time{}, time.Time{},
-			"", ""}
+			"", "", 0, 0}
 
 		err = rows.Scan(&incoming.Nomenclature, &incoming.Supplier, &incoming.UnitsCount,
 			&incoming.UnitCost, &incoming.IncomingDate, &incoming.IncomingTime,
-			&incoming.ContractIncomingDate, &incoming.Passport, &incoming.Certificate)
+			&incoming.ContractIncomingDate, &incoming.Passport, &incoming.Certificate,
+				&incoming.ID, &incoming.IDSupplier)
+
 		if err != nil {
 			res, _ := json.Marshal([]UnverifiedUser{})
 			Response(rw, req, nil, http.StatusOK, res)
@@ -124,7 +129,9 @@ func GetIncoming(rw http.ResponseWriter, req *http.Request) {
 			incoming.IncomingTime.Format("15:04:05"),
 			incoming.ContractIncomingDate.Format("02.01.2006"),
 			 Config.Upload.UploadPassportDir + "\\" + incoming.Passport,
-			Config.Upload.UploadCertificateDir + "\\" + incoming.Certificate}
+			Config.Upload.UploadCertificateDir + "\\" + incoming.Certificate,
+			incoming.ID,
+			incoming.IDSupplier}
 		result = append(result, returnIncoming)
 	}
 

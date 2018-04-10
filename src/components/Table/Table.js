@@ -16,10 +16,12 @@ export default class Table extends Component {
         this.state = {
             headers: props.headers,
             data: props.data,
+            id: props.id,
             sortBy: null,
             descending: false,
             preSearchData: props.data,
-
+            edit: null,
+            location: props.location,
         };
         data = this.state.data;
         this.sort = this.sort.bind(this);
@@ -27,7 +29,9 @@ export default class Table extends Component {
         this.focusSearchField = this.focusSearchField.bind(this);
         this.clickDropDown = this.clickDropDown.bind(this);
         this.replaceStatus = this.replaceStatus.bind(this);
-    }
+        this.showEditor = this.showEditor.bind(this);
+        this.save= this.save.bind(this);
+}
 
     focusSearchField(event){
         for (let i = 0; i < this.state.data.length; i++) {
@@ -41,16 +45,46 @@ export default class Table extends Component {
         });
     }
 
+    save(event) {
+        event.preventDefault();
+        let input = event.target.firstChild;
+        let data = this.state.data.slice();
+        data[this.state.edit.row][this.state.edit.cell] = input.value;
+        data = this.props.save(event, this.state.edit.row, this.state.edit.cell, this.state.data);
+        this.setState({
+            edit: null,
+            data: data,
+        });
+    }
+
     componentDidMount() {
         if (this.props.replaceStatus) {
             this.replaceStatus();
         }
+
+        document.onkeydown = function(event) {
+            event = event || window.event;
+            if (event.keyCode === 27) {
+                this.setState({
+                    edit: null,
+                });
+            }
+        }.bind(this);
     }
 
     componentDidUpdate() {
         if (this.props.replaceStatus) {
             this.replaceStatus();
         }
+    }
+
+    showEditor(event) {
+        this.setState({
+            edit: {
+                row: parseInt(event.target.dataset.row, 10),
+                cell: event.target.cellIndex,
+            }
+        });
     }
 
     search(event) {
@@ -140,13 +174,26 @@ export default class Table extends Component {
                         return (
                             <tr key={idx_row}>
                                 {row.map(function (cell, idx_column) {
+                                    if (idx_column >= this.state.headers.length) {
+                                        return;
+                                    }
+                                    let content = cell;
+                                    let edit = this.state.edit;
+                                    if (edit && edit.row === idx_row && edit.cell === idx_column &&
+                                        this.state.headers[idx_column] !== "Статус") {
+                                        content =
+                                            <form onSubmit={this.save}>
+                                                <input autoFocus={true} type="text" defaultValue={content}/>
+                                            </form>
+                                    }
                                     return (
                                         <td data-idx={idx_row*row.length+idx_column}
                                             data-row={idx_row}
-                                            onClick={this.props.tdClick}
+                                            onContextMenu={this.props.tdClick}
+                                            onDoubleClick={this.showEditor}
                                             id={`dataCell${idx_row*row.length+idx_column}`}
                                             className="dataCell" key={idx_column}>
-                                            {cell}
+                                            {content}
                                         </td>
                                     )
                                 }.bind(this))}

@@ -57,6 +57,8 @@ type Incoming struct {
 	ContractIncomingDate time.Time
 	Passport string
 	Certificate string
+	ID int
+	IDSupplier int
 }
 
 func Response(rw http.ResponseWriter, req *http.Request, err error, status int, res []byte) {
@@ -149,7 +151,6 @@ func GetIdNomenclatureByName(name string) (int) {
 	result := 0
 	for rows.Next() {
 		err = rows.Scan(&result)
-		fmt.Println(err)
 		if err != nil {
 			WriteToLog(err.Error())
 			return 0

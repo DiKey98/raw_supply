@@ -42,6 +42,8 @@ export default class RawIncoming extends Component {
         this.nomenclatureToArray = this.nomenclatureToArray.bind(this);
         this.suppliersToArray = this.suppliersToArray.bind(this);
         this.incomingToArray = this.incomingToArray.bind(this);
+
+        this.save = this.save.bind(this);
     }
 
     showAddForm() {
@@ -66,6 +68,7 @@ export default class RawIncoming extends Component {
                 <Table className="text-center"
                        headers={headers}
                        data={this.incoming}
+                       save={this.save}
                        tdClick={this.showDocuments}
                 />,
                 document.getElementById('incomingTable')
@@ -90,6 +93,7 @@ export default class RawIncoming extends Component {
                 <Table className="text-center"
                        headers={headers}
                        data={this.incoming}
+                       save={this.save}
                        tdClick={this.showDocuments}
                 />,
                 document.getElementById('incomingTable')
@@ -109,6 +113,7 @@ export default class RawIncoming extends Component {
                 <Table className="text-center"
                        headers={headers}
                        data={this.incoming}
+                       save={this.save}
                        tdClick={this.showDocuments}
                 />,
                 document.getElementById('incomingTable')
@@ -154,6 +159,8 @@ export default class RawIncoming extends Component {
             tmp.push(objects[i]['IncomingDate']);
             tmp.push(objects[i]['IncomingTime']);
             tmp.push(objects[i]['ContractIncomingDate']);
+            tmp.push(objects[i]['ID']);
+            tmp.push(objects[i]['IDSupplier']);
             result.push(tmp);
             this.certificates.push(objects[i]['Certificate']);
             this.passports.push(objects[i]['Passport']);
@@ -180,6 +187,7 @@ export default class RawIncoming extends Component {
                 <Table className="text-center"
                        headers={headers}
                        data={this.incoming}
+                       save={this.save}
                        tdClick={this.showDocuments}
                 />,
                 document.getElementById('incomingTable')
@@ -254,7 +262,8 @@ export default class RawIncoming extends Component {
                     <div className="container-fluid tab" id="incomingTable">
                     <Table className="text-center"
                            headers={headers}
-                           data={this.incoming}
+                           data={data}
+                           save={this.save}
                            tdClick={this.showDocuments}
                     />
                     </div>
@@ -266,6 +275,8 @@ export default class RawIncoming extends Component {
     }
 
     showDocuments(event) {
+        event.preventDefault();
+
         if (headers[event.target.dataset.idx % headers.length] !== headers[0]) {
             return;
         }
@@ -274,5 +285,31 @@ export default class RawIncoming extends Component {
         ReactDOM.render(<DocumentViewer pathToPassport={this.passports[event.target.dataset.row]}
                                         pathToCertificate={this.certificates[event.target.dataset.row]} />,
             document.getElementById('overlayContainer'));
+    }
+
+    save(event, row, column, data) {
+        this.incoming = data;
+
+        let units = parseInt(data[row][2], 10);
+        let unitCost = parseInt(data[row][3].split(" ")[0], 10);
+        data[row][4] = `${units * unitCost} ₽`;
+
+        $.ajax({
+            url: "/updateIncoming/",
+            method: "POST",
+            dataType: "JSON",
+            data: {
+                nomenclature: data[row][0],
+                unitsCount: data[row][2],
+                unitCost: data[row][3],
+                incomingDate: data[row][5],
+                incomingTime: data[row][6],
+                contractIncomingDate: data[row][7],
+                id: data[row][8],
+                supplier: data[row][9],
+            }
+        });
+
+        return data;
     }
 }
